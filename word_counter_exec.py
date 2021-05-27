@@ -10,4 +10,14 @@ if __name__ == '__main__':
         for key, value in w.parse_output(runner.cat_output()):
             word_count_dict[key] = value
 
+        print(len(word_count_dict))
+
+    WordCounter.COLUMN_INDEX = 5
+    with w.make_runner() as runner:
+        runner.run()
+        word_count_dict = {}
+        for key, value in w.parse_output(runner.cat_output()):
+            word_count_dict[key] = value
+        
+        print(len(word_count_dict))
 

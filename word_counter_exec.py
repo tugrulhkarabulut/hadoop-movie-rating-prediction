@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from word_counter import WordCounter
 
 if __name__ == '__main__':

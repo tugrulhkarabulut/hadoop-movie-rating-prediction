@@ -10,6 +10,4 @@ if __name__ == '__main__':
         for key, value in w.parse_output(runner.cat_output()):
             word_count_dict[key] = value
 
-        print(word_count_dict)
-
 

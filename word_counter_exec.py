@@ -1,7 +1,7 @@
 from word_counter import WordCounter
 
 if __name__ == '__main__':
-    w = WordCounter(args=['-r', 'hadoop', '--files', 'hdfs:///input/preprocessed_sample.csv'])
+    w = WordCounter(args=['-r', 'hadoop', '--dirs', 'hdfs:///input/preprocessed_sample.csv'])
     with w.make_runner() as runner:
         runner.run()
         word_count_dict = {}

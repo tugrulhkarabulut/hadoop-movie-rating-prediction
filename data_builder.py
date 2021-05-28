@@ -2,7 +2,7 @@ import pandas as pd
 
 
 class DataBuilder:
-    def __init__(self, orig_data_input, tf_idf_inputs):
+    def __init__(self, orig_data_input=None, tf_idf_inputs=None):
         self.orig_data_input = orig_data_input
         self.tf_idf_inputs = tf_idf_inputs
     
@@ -13,7 +13,8 @@ class DataBuilder:
             self.tf_idf_data.append(pd.read_csv(inp))
     
     def build(self):
-        self.load_data()
+        if not hasattr(self, 'data'):
+            self.load_data()
 
         for i, inp in enumerate(self.tf_idf_data):
             pivot = inp.pivot_table(values='tf_idf', index=inp['review_id'], columns='word', aggfunc='first')

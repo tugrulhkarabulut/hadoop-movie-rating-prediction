@@ -12,7 +12,7 @@ stop_words = stopwords.words('english')
 tqdm.pandas()
 
 DATA_PATH = '~/Documents/vm_data/'
-FILE_NAME = 'sample.json'
+FILE_NAME = 'part-01.json'
 
 def preprocess_text(df):
     stemmer = PorterStemmer()
@@ -55,4 +55,4 @@ if __name__ == '__main__':
     del df['reviewer']
     del df['review_date']
 
-    df.to_csv('preprocessed_sample.csv', index=False)
+    df.to_csv('preprocessed_part1.csv', index=False)

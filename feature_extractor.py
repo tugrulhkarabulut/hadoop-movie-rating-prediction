@@ -1,5 +1,6 @@
 import argparse
 import pandas as pd
+from pydoop import hdfs
 
 from word_counter import WordCounter
 from inverse_document_frequency_calculator import InverseDocumentFrequencyCalculator
@@ -121,5 +122,11 @@ def parse_arguments():
     return args
 
 if __name__ == '__main__':
+
     args = parse_arguments()
-    extract_features(args.input, args.output, args.max_words_summary, args.max_words_review, env='hadoop')
+    with hdfs.open(args.input) as f:
+        df = pd.read_csv(f)
+
+    print('done')
+    
+    #extract_features(args.input, args.output, args.max_words_summary, args.max_words_review, env='hadoop')

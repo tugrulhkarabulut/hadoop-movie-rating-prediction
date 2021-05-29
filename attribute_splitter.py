@@ -1,9 +1,8 @@
-from base_job import BaseJob
+from mrjob.job import MRJob
 from time import time
 import sys
-import pandas as pd
 
-class AttributeSplitter(BaseJob):
+class AttributeSplitter(MRJob):
     CALC_FUNCTION = None
 
     @classmethod
@@ -17,3 +16,7 @@ class AttributeSplitter(BaseJob):
         values = list(values)
         values.sort(key=lambda x: x[1])
         yield key, (values[0][0], values[0][1])
+
+
+if __name__ == '__main__':
+    AttributeSplitter.run()

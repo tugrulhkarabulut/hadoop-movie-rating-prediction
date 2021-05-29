@@ -112,7 +112,7 @@ def extract_features(input_paths, output_path, max_words_summary=50, max_words_r
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--input', type=str, required=True)
-    parser.add_argument('--output', type=str, default='./')
+    parser.add_argument('--output', type=str, required=True)
     parser.add_argument('--max_words_summary', type=int, default=50)
     parser.add_argument('--max_words_review', type=int, default=100)
 

@@ -1,11 +1,10 @@
-from base_job import BaseJob
+from mrjob.job import MRJob
 from time import time
 import sys
-import pandas as pd
-import scipy.stats as st
 
 
-class BaggingPredictor(BaseJob):
+
+class BaggingPredictor(MRJob):
     CALC_FUNCTION = None
     CLASSIFIERS = None
 
@@ -23,4 +22,10 @@ class BaggingPredictor(BaseJob):
             yield str(i), int(el)
 
     def reducer(self, key, values):
+        import scipy.stats as st
+
         yield key, list(st.mode(values, axis=0)[0][0])[0]
+
+
+if __name__ == '__main__':
+    BaggingPredictor.run()

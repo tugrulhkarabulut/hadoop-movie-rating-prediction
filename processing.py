@@ -6,6 +6,7 @@ from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 import nltk
 import re
+import argparse
 
 nltk.download('stopwords')
 stop_words = stopwords.words('english')
@@ -44,8 +45,19 @@ def write_list_to_txt(list_, output_file='output.txt'):
         for el in tqdm(list_):
             f.write("{}\n".format(el))
 
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--input', type=str, required=True)
+    parser.add_argument('--output', type=str, required=True)
+
+    args = parser.parse_args()
+
+    return args
+
 if __name__ == '__main__':
-    df = pd.read_json(DATA_PATH + FILE_NAME)
+    args = parse_arguments()
+
+    df = pd.read_json(args.input)
     df = df.dropna()
     df = preprocess_data(df)
     df = extract_helpful_count(df)
@@ -55,4 +67,4 @@ if __name__ == '__main__':
     del df['reviewer']
     del df['review_date']
 
-    df.to_csv('preprocessed_part1.csv', index=False)
+    df.to_csv(args.output, index=False)

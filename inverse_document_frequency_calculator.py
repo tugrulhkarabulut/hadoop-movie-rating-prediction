@@ -1,6 +1,8 @@
 from mrjob.job import MRJob
 
 class InverseDocumentFrequencyCalculator(MRJob):
+    DIRS = ['~/.local/lib/python3.6/site-packages/numpy']
+
     @classmethod
     def calc_n_rows(cls, f):
         return sum(1 for _ in f)

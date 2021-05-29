@@ -34,7 +34,7 @@ def extract_features(input_paths, output_path, hadoop_output, max_words_summary=
     with hdfs.open(input_paths_str) as f:
         n_rows = InverseDocumentFrequencyCalculator.calc_n_rows(f)
 
-    w = InverseDocumentFrequencyCalculator(args=[input_paths_str, '-r', env, '--n_rows', str(n_rows), '--column_index', '5'])
+    w = InverseDocumentFrequencyCalculator(args=[input_paths_str, '-r', env, '--n_rows', str(n_rows), '--column_index', '3'])
     word_summary_idfs = {}
     with w.make_runner() as runner:
         runner.run()

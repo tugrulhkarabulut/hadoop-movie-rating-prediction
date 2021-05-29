@@ -3,7 +3,9 @@ from mrjob.job import MRJob
 class InverseDocumentFrequencyCalculator(MRJob):
     @classmethod
     def calc_n_rows(cls, input_path):
-        with open(input_path) as f:
+        from pydoop import hdfs
+
+        with hdfs.open(input_path) as f:
             return sum(1 for _ in f)
 
     def configure_args(self):

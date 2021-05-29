@@ -8,7 +8,7 @@ from term_frequency_calculator import TermFrequencyCalculator
 from data_builder import DataBuilder
 
 
-def extract_features(input_paths, output_path, max_words_summary=50, max_words_review=100, env='hadoop'):
+def extract_features(input_paths, output_path, hadoop_output, max_words_summary=50, max_words_review=100, env='hadoop'):
     input_paths_str = ''
     if isinstance(input_paths, list):
         input_paths_str = ','.join(input_paths_str)
@@ -104,16 +104,20 @@ def extract_features(input_paths, output_path, max_words_summary=50, max_words_r
 
 
     builder = DataBuilder()
-    builder.data = pd.read_csv(input_paths_str)
+    with hdfs.open(input_paths_str) as f:
+        builder.data = pd.read_csv(f)
+    
     builder.tf_idf_data = [tf_idf_summary, tf_idf_review]
     builder.build()
     builder.save(output_path)
+    hdfs.put(output_path, hadoop_output)
 
     
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--input', type=str, required=True)
     parser.add_argument('--output', type=str, required=True)
+    parser.add_argument('--hadoop_output', type=str, required=True)
     parser.add_argument('--max_words_summary', type=int, default=50)
     parser.add_argument('--max_words_review', type=int, default=100)
 
@@ -124,9 +128,5 @@ def parse_arguments():
 if __name__ == '__main__':
 
     args = parse_arguments()
-    with hdfs.open(args.input) as f:
-        df = pd.read_csv(f)
-
-    print('done')
-    
-    #extract_features(args.input, args.output, args.max_words_summary, args.max_words_review, env='hadoop')
+    extract_features(args.input, args.output, args.hadoop_output, args.max_words_summary, args.max_words_review, env='hadoop')
+    print('Done!')

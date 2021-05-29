@@ -1,8 +1,7 @@
 from mrjob.job import MRJob
+import math
 
 class InverseDocumentFrequencyCalculator(MRJob):
-    DIRS = ['~/.local/lib/python3.6/site-packages/numpy']
-
     @classmethod
     def calc_n_rows(cls, f):
         return sum(1 for _ in f)
@@ -17,19 +16,15 @@ class InverseDocumentFrequencyCalculator(MRJob):
 
 
     def mapper(self, _, line):
-        import numpy as np
-
         splitted = line.split(',')
         review_summary = splitted[self.options.column_index]
         words = review_summary.strip().split()
-        unique_words = np.unique(words)
+        unique_words = set(words)
         for word in unique_words:
             yield word, 1
 
     def reducer(self, key, values):
-        import numpy as np
-
-        yield key, np.log(int(self.options.n_rows) / (sum(values) + 10e-8))
+        yield key, math.log(int(self.options.n_rows) / (sum(values) + 10e-8))
 
 
 

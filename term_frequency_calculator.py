@@ -10,15 +10,6 @@ class TermFrequencyCalculator(MRJob):
     def load_args(self, args):
         super(TermFrequencyCalculator, self).load_args(args)
 
-    def set_max_words(self, max_words):
-        self.MAX_WORDS = max_words
-
-    def set_word_counts(self, counts):
-        filtered = counts.sort_values(by='count', ascending=False).iloc[:self.MAX_WORDS].reset_index(drop=True)
-        filtered.index = filtered['word']
-        del filtered['word']
-        self.counts = filtered
-
     def mapper(self, _, line):
         splitted = line.split(',')
         review_summary = splitted[self.options.column_index]

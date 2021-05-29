@@ -31,36 +31,36 @@ def extract_features(input_paths, output_path, hadoop_output, max_words_summary=
         for key, value in w.parse_output(runner.cat_output()):
             review_word_counts[key] = value
 
-    with hdfs.open(input_paths_str) as f:
-        n_rows = InverseDocumentFrequencyCalculator.calc_n_rows(f)
-
-    w = InverseDocumentFrequencyCalculator(args=[input_paths_str, '-r', env, '--n_rows', str(n_rows), '--column_index', '3'])
-    word_summary_idfs = {}
-    with w.make_runner() as runner:
-        runner.run()
-        for key, value in w.parse_output(runner.cat_output()):
-            word_summary_idfs[key] = value
-
-    w = InverseDocumentFrequencyCalculator(args=[input_paths_str, '-r', env, '--n_rows', str(n_rows), '--column_index', '5'])
-    word_review_idfs = {}
-    with w.make_runner() as runner:
-        runner.run()
-        for key, value in w.parse_output(runner.cat_output()):
-            word_review_idfs[key] = value
-
 
     summary_word_counts = pd.DataFrame({'word': summary_word_counts.keys(), 'count': summary_word_counts.values()})
     review_word_counts = pd.DataFrame({'word': review_word_counts.keys(), 'count': review_word_counts.values()})
-
-    word_summary_idfs = pd.DataFrame({'word': word_summary_idfs.keys(), 'idf': word_summary_idfs.values()})
-    word_review_idfs = pd.DataFrame({'word': word_review_idfs.keys(), 'idf': word_review_idfs.values()})
-
 
     words_summary = list(summary_word_counts.sort_values(by='count', ascending=False).iloc[:max_words_summary].reset_index(drop=True)['word'])
     words_summary_str = ','.join(words_summary)
 
     words_review = list(review_word_counts.sort_values(by='count', ascending=False).iloc[:max_words_review].reset_index(drop=True)['word'])
     words_review_str = ','.join(words_review)
+
+
+    with hdfs.open(input_paths_str) as f:
+        n_rows = InverseDocumentFrequencyCalculator.calc_n_rows(f)
+
+    w = InverseDocumentFrequencyCalculator(args=[input_paths_str, '-r', env, '--n_rows', str(n_rows), '--column_index', '3', '--words', words_summary_str])
+    word_summary_idfs = {}
+    with w.make_runner() as runner:
+        runner.run()
+        for key, value in w.parse_output(runner.cat_output()):
+            word_summary_idfs[key] = value
+
+    w = InverseDocumentFrequencyCalculator(args=[input_paths_str, '-r', env, '--n_rows', str(n_rows), '--column_index', '5', '--words', words_review_str])
+    word_review_idfs = {}
+    with w.make_runner() as runner:
+        runner.run()
+        for key, value in w.parse_output(runner.cat_output()):
+            word_review_idfs[key] = value
+
+    word_summary_idfs = pd.DataFrame({'word': word_summary_idfs.keys(), 'idf': word_summary_idfs.values()})
+    word_review_idfs = pd.DataFrame({'word': word_review_idfs.keys(), 'idf': word_review_idfs.values()})
 
 
     w = TermFrequencyCalculator(args=[input_paths_str, '-r', env, '--column_index', '3', '--words', words_summary_str])

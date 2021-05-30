@@ -247,10 +247,6 @@ class BaseDecisionTreeEstimator:
         
         os.remove(process_data_path)
         os.remove(split_data_path)
-        best_feature, best_split_value, min_impurity = list(result.sort_values(by='imp').iloc[0])
-        best_feature = int(best_feature)
-
-        os.remove(process_output_path)
 
         return best_feature, best_split_value, min_impurity
 

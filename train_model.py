@@ -21,7 +21,7 @@ def train_model(data_input, model_output):
     
     del df['movie']
     X, y = df.drop(columns=['rating']).values, df['rating'].values
-    X_train, y_train, X_test, y_test = train_test_split(X, y, test_size=0.2)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y)
 
     model = RandomForestClassifier(split_method='binary', max_depth=12, n_trees=10)
     model.fit(X_train, y_train)

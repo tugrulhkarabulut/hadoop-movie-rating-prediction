@@ -13,7 +13,7 @@ class AttributeSplitter(MRJob):
         super(AttributeSplitter, self).load_args(args)
 
     def mapper(self, _, line):
-        #from decision_tree import calculate_split_result
+        from .decision_tree import calculate_split_result
         #from random_forest_classifier import RandomForestClassifier
         with open(self.options.split_data) as f:
             pass

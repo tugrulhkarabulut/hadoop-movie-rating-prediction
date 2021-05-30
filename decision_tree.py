@@ -235,7 +235,7 @@ class BaseDecisionTreeEstimator:
             pickle.dump(tree, f, pickle.HIGHEST_PROTOCOL)
 
 
-        w = AttributeSplitter(args=[process_data_path, '-r', 'hadoop', '--criterion', self.criterion])
+        w = AttributeSplitter(args=[process_data_path, '-r', 'hadoop', '--criterion', self.criterion, '--setup', 'export PYTHONPATH=$PYTHONPATH:~/hadoop-movie-rating-prediction/#'])
         
         with w.make_runner() as runner:
             runner.run()

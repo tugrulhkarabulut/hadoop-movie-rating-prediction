@@ -3,8 +3,6 @@ import pickle
 
 class AttributeSplitter(MRJob):
 
-    FILES = ['decision_tree.py', 'random_forest_classifier.py']
-
     def configure_args(self):
         super(AttributeSplitter, self).configure_args()
         self.add_passthru_arg('--criterion', type=str)

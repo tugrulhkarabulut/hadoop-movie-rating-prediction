@@ -23,6 +23,7 @@ class AttributeSplitter(MRJob):
             pass
 
     def reducer(self, key, values):
+        values = list(values)
         values.sort(key=lambda x: x[1])
         yield key, (values[0][0], values[0][1])
 

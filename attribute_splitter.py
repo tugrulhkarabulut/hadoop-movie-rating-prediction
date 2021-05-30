@@ -18,7 +18,7 @@ class AttributeSplitter(MRJob):
         from proj.decision_tree import calculate_split_result
         from proj.random_forest_classifier import RandomForestClassifier
 
-        yield int(line), 0, 0.5
+        yield int(line), (0, 0.5)
 
     def reducer(self, key, values):
         values = list(values)

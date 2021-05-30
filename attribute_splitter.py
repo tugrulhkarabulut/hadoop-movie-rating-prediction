@@ -15,7 +15,7 @@ class AttributeSplitter(MRJob):
         super(AttributeSplitter, self).load_args(args)
 
     def mapper(self, _, line):
-        from proj.decision_tree import calculate_split_result
+        #from proj.decision_tree import calculate_split_result
         from proj.random_forest_classifier import RandomForestClassifier
         try:
             yield int(line), (0, 0.5)

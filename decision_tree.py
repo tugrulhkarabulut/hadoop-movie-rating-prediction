@@ -227,7 +227,8 @@ class BaseDecisionTreeEstimator:
             for feat in features:
                 f.write(str(feat) + '\n')
 
-        data = pd.DataFrame({'X': X, 'y': y})
+        data = pd.DataFrame(X)
+        data['y'] = y
         data.to_csv(split_data_path, index=False)
 
         with open(tree_path, 'wb') as f:

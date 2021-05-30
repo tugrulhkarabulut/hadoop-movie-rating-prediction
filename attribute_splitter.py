@@ -3,7 +3,7 @@ import pickle
 
 class AttributeSplitter(MRJob):
 
-    #DIRS = ['~/hadoop-movie-rating-prediction#proj']
+    DIRS = ['~/hadoop-movie-rating-prediction#proj']
 
     def configure_args(self):
         super(AttributeSplitter, self).configure_args()

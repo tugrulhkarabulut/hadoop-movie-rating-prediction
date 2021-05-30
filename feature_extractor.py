@@ -78,6 +78,8 @@ def extract_features(input_paths, output_path, hadoop_output, max_words_summary=
             word_doc_review_tfs[tuple(key)] = value
 
 
+    print('Jobs are done!')
+
     summary_tf_keys = word_doc_summary_tfs.keys()
     summary_tf_review_ids = [el[0] for el in summary_tf_keys]
     summary_tf_words = [el[1] for el in summary_tf_keys]
@@ -88,6 +90,7 @@ def extract_features(input_paths, output_path, hadoop_output, max_words_summary=
 
     word_doc_summary_tfs = pd.DataFrame({'review_id': summary_tf_review_ids,  'word': summary_tf_words, 'tf': word_doc_summary_tfs.values()})
     word_doc_review_tfs = pd.DataFrame({'review_id': review_tf_review_ids,'word': review_tf_words, 'tf': word_doc_review_tfs.values()})
+
 
     result = word_doc_summary_tfs.merge(word_summary_idfs, on='word')
     result['tf_idf'] = result['tf'] * result['idf']
@@ -104,13 +107,20 @@ def extract_features(input_paths, output_path, hadoop_output, max_words_summary=
     tf_idf_review['word'] = result['word']
     tf_idf_review['tf_idf'] = result['tf_idf']
 
+    print('tf idf calculated')
+
 
     builder = DataBuilder()
     with hdfs.open(input_paths_str) as f:
         builder.data = pd.read_csv(f)
     
+    print('opened file from hadoop')
+
     builder.tf_idf_data = [tf_idf_summary, tf_idf_review]
     builder.build()
+
+    print('train data is built')
+
     builder.save(output_path)
     hdfs.put(output_path, hadoop_output)
 

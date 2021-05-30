@@ -3,14 +3,21 @@ from time import time
 import sys
 
 class AttributeSplitter(MRJob):
-    CALC_FUNCTION = None
 
-    @classmethod
-    def set_calc_function(cls, func):
-        cls.CALC_FUNCTION = func
+    DIRS = ['./']
+
+    def configure_args(self):
+        super(AttributeSplitter, self).configure_args()
+        self.add_passthru_arg('--criterion', type=str)
+        self.add_passthru_arg('--feature_types', type=str)
+        self.add_file_arg('--split_data')
+        self.add_file_arg('--tree')
+
+    def load_args(self, args):
+        super(AttributeSplitter, self).load_args(args)
 
     def mapper(self, _, line):
-        yield AttributeSplitter.CALC_FUNCTION(int(line))
+        yield int(line), 0, 0.5
 
     def reducer(self, key, values):
         values = list(values)

@@ -1,9 +1,35 @@
 import numpy as np
+from numpy.lib.shape_base import split
 import pandas as pd
 import scipy.stats as st
 import uuid
 import os
+import pickle
 from attribute_splitter import AttributeSplitter
+
+def calculate_split_result(tree, X, y, feature, weights, criterion, feature_types=None):
+        tree.feature = feature
+        X_feature = X[:, feature]
+        if feature_types is not None and feature_types[feature] == 'cat':
+            tree.split = np.unique(X_feature)
+            if len(tree.split) < 2:
+                return
+            impurity = tree.impurity_for_split(X, y, weights, criterion=criterion)
+            return feature, (tree.split, impurity)
+        else:
+            X_feature_sorted_indices = np.argsort(X_feature)
+            X_feature_sorted = X_feature[X_feature_sorted_indices]
+            y_sorted = y[X_feature_sorted_indices]
+            thresholds = (X_feature_sorted[1:] + X_feature_sorted[:-1])/2
+            thresholds_len = len(thresholds)
+            for value_index, value in enumerate(thresholds):
+                if (value_index < thresholds_len - 1) and (y_sorted[value_index] == y_sorted[value_index+1] or thresholds[value_index] == thresholds[value_index+1]):
+                    continue
+                
+                tree.split = value
+                impurity = tree.impurity_for_split(X, y, weights, criterion=criterion)
+                return feature, (value, impurity)
+    
 
 class Node:
     def __init__(self, feature=-1, split=None, impurity=np.inf):
@@ -194,29 +220,33 @@ class BaseDecisionTreeEstimator:
 
         process_data_id = str(uuid.uuid4())
         process_data_path = 'split_data_' + process_data_id + '.txt'
-        process_output_path = 'result_' + process_data_id + '.txt'
+        split_data_path = 'train_temp_data_' + process_data_id + '.csv'
+        tree_path = 'tree_' + process_data_id + '.pickle'
         
         with open(process_data_path, 'w') as f:
             for feat in features:
                 f.write(str(feat) + '\n')
 
-        AttributeSplitter.set_input_path(process_data_path)
-        AttributeSplitter.set_output_path(process_output_path)
-        AttributeSplitter.set_calc_function(
-            lambda feature: self._calculate_split_result(tree, X, y, feature, weights, feature_types)
-        )
-        AttributeSplitter.run()
+        data = pd.DataFrame({'X': X, 'y': y})
+        data.to_csv(split_data_path, index=False)
+
+        with open(tree_path, 'wb') as f:
+            pickle.dump(tree, f, pickle.HIGHEST_PROTOCOL)
+
+
+        w = AttributeSplitter(args=[process_data_path, '-r', 'hadoop', '--criterion', self.criterion, '--feature_types', ','.join(feature_types), '--split_data', split_data_path, '-tree', tree_path])
+        
+        with w.make_runner() as runner:
+            runner.run()
+            best_feature, best_split_value, min_impurity = None, None, None
+            for key, value in w.parse_output(runner.cat_output()):
+                if not best_feature or min_impurity < value[1]:
+                    best_feature = key
+                    best_split_value = value[0]
+                    min_impurity = value[1]
+        
         os.remove(process_data_path)
-
-        result = pd.read_csv(process_output_path, header=None, sep='\t')
-        result['feature'] = result[0]
-        result['split'] = result[1].apply(lambda x: x.split(', ')[0][1:]).astype('float64')
-        result['imp'] = result[1].apply(lambda x: x.split(', ')[1][:-1]).astype('float64')
-
-
-        del result[0]
-        del result[1]
-
+        os.remove(split_data_path)
         best_feature, best_split_value, min_impurity = list(result.sort_values(by='imp').iloc[0])
         best_feature = int(best_feature)
 
@@ -224,29 +254,6 @@ class BaseDecisionTreeEstimator:
 
         return best_feature, best_split_value, min_impurity
 
-    def _calculate_split_result(self, tree, X, y, feature, weights, feature_types=None):
-        tree.feature = feature
-        X_feature = X[:, feature]
-        if feature_types is not None and feature_types[feature] == 'cat':
-            tree.split = np.unique(X_feature)
-            if len(tree.split) < 2:
-                return
-            impurity = tree.impurity_for_split(X, y, weights, criterion=self.criterion)
-            return feature, (tree.split, impurity)
-        else:
-            X_feature_sorted_indices = np.argsort(X_feature)
-            X_feature_sorted = X_feature[X_feature_sorted_indices]
-            y_sorted = y[X_feature_sorted_indices]
-            thresholds = (X_feature_sorted[1:] + X_feature_sorted[:-1])/2
-            thresholds_len = len(thresholds)
-            for value_index, value in enumerate(thresholds):
-                if (value_index < thresholds_len - 1) and (y_sorted[value_index] == y_sorted[value_index+1] or thresholds[value_index] == thresholds[value_index+1]):
-                    continue
-                
-                tree.split = value
-                impurity = tree.impurity_for_split(X, y, weights, criterion=self.criterion)
-                return feature, (value, impurity)
-    
     def _label_node(self, node, y):
         pass
 

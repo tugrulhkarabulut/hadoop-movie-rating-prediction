@@ -5,17 +5,6 @@ import sys
 
 
 class BaggingPredictor(MRJob):
-    CALC_FUNCTION = None
-    CLASSIFIERS = None
-
-    @classmethod
-    def set_calc_function(cls, func):
-        cls.CALC_FUNCTION = func
-
-    @classmethod
-    def set_classifiers(cls, classifiers):
-        cls.CLASSIFIERS = classifiers
-
     def mapper(self, _, line):
         preds = BaggingPredictor.CALC_FUNCTION(BaggingPredictor.CLASSIFIERS[int(line)])
         for i, el in enumerate(preds):

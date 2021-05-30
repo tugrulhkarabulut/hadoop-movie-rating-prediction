@@ -6,15 +6,17 @@ class AttributeSplitter(MRJob):
     def configure_args(self):
         super(AttributeSplitter, self).configure_args()
         self.add_passthru_arg('--criterion', type=str)
-        #self.add_file_arg('--split_data')
-        #self.add_file_arg('--tree')
+        self.add_file_arg('--split_data')
+        self.add_file_arg('--tree')
 
     def load_args(self, args):
         super(AttributeSplitter, self).load_args(args)
 
     def mapper(self, _, line):
-        from decision_tree import calculate_split_result
-        from random_forest_classifier import RandomForestClassifier
+        #from decision_tree import calculate_split_result
+        #from random_forest_classifier import RandomForestClassifier
+        with open(self.options.split_data) as f:
+            pass
         try:
             yield int(line), (0, 0.5)
         except:

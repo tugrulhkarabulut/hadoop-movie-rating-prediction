@@ -235,7 +235,7 @@ class BaseDecisionTreeEstimator:
             pickle.dump(tree, f, pickle.HIGHEST_PROTOCOL)
 
 
-        w = AttributeSplitter(args=[process_data_path, '-r', 'hadoop', '--criterion', self.criterion, '--split_data', split_data_path, '--tree', tree_path])
+        w = AttributeSplitter(args=[process_data_path, '-r', 'hadoop', '--criterion', self.criterion])
         
         with w.make_runner() as runner:
             runner.run()

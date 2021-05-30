@@ -1,10 +1,9 @@
 from mrjob.job import MRJob
-from time import time
-import sys
+import pickle
 
 class AttributeSplitter(MRJob):
 
-    DIRS = ['./']
+    DIRS = ['~/hadoop-movie-rating-prediction#proj']
 
     def configure_args(self):
         super(AttributeSplitter, self).configure_args()
@@ -16,6 +15,9 @@ class AttributeSplitter(MRJob):
         super(AttributeSplitter, self).load_args(args)
 
     def mapper(self, _, line):
+        from proj.decision_tree import calculate_split_result
+        from proj.random_forest_classifier import RandomForestClassifier
+
         yield int(line), 0, 0.5
 
     def reducer(self, key, values):

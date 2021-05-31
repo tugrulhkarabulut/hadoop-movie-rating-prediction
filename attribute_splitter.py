@@ -5,12 +5,6 @@ import os
 class AttributeSplitter(MRJob):
 
     FILES = ['test.py']
-    DIRS = ['~/.local/lib/python3.6/site-packages/numpy']
-
-    def files(self):
-        base = '../.local/lib/python3.6/site-packages/'
-        dirs = os.listdir(base)
-        return [base + dir_ for dir_ in dirs]
 
     def configure_args(self):
         super(AttributeSplitter, self).configure_args()
@@ -22,9 +16,9 @@ class AttributeSplitter(MRJob):
         super(AttributeSplitter, self).load_args(args)
 
     def mapper(self, _, line):
-        #from decision_tree import calculate_split_result
-        #from random_forest_classifier import RandomForestClassifier
+
         from test import test_func
+        test_func()
         with open(self.options.split_data) as f:
             pass
         try:

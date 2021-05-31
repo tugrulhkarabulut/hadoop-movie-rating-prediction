@@ -1,6 +1,7 @@
 from mrjob.job import MRJob
 import pickle
 import os
+import tarfile
 
 class AttributeSplitter(MRJob):
 
@@ -17,6 +18,10 @@ class AttributeSplitter(MRJob):
         super(AttributeSplitter, self).load_args(args)
 
     def mapper(self, _, line):
+        nump_f = tarfile.open('numpy.tar.gz', "r:gz")
+        nump_f.extractall()
+        nump_f.close()
+
         from test import test_func
         test_func()
         with open(self.options.split_data) as f:

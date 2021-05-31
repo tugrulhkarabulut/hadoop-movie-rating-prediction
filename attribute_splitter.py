@@ -1,6 +1,4 @@
 from mrjob.job import MRJob
-import pickle
-import os
 
 class AttributeSplitter(MRJob):
 

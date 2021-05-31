@@ -1,2 +1,4 @@
+import numpy as np
+
 def test_func():
-    return 0
+    return np.sum([1, 2, 3])

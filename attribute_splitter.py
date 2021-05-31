@@ -4,6 +4,7 @@ import pickle
 class AttributeSplitter(MRJob):
 
     FILES = ['test.py']
+    DIRS = ['~/.local/lib/python3.6/site-packages/numpy']
 
     def configure_args(self):
         super(AttributeSplitter, self).configure_args()

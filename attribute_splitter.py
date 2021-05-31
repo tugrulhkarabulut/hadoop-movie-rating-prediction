@@ -8,7 +8,7 @@ class AttributeSplitter(MRJob):
     DIRS = ['~/.local/lib/python3.6/site-packages/numpy']
 
     def files(self):
-        base = '/home/tugrul/.local/lib/python3.6/site-packages/'
+        base = '../.local/lib/python3.6/site-packages/'
         dirs = os.listdir(base)
         return [base + dir_ for dir_ in dirs]
 

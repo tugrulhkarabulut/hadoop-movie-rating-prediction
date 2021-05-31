@@ -14,8 +14,6 @@ class AttributeSplitter(MRJob):
         super(AttributeSplitter, self).load_args(args)
 
     def mapper(self, _, line):
-        with open(self.options.split_data) as f:
-            pass
         try:
             yield int(line), (0, 0.5)
         except:

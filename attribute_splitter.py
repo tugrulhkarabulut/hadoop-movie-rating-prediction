@@ -16,9 +16,6 @@ class AttributeSplitter(MRJob):
         super(AttributeSplitter, self).load_args(args)
 
     def mapper(self, _, line):
-
-        from test import test_func
-        test_func()
         with open(self.options.split_data) as f:
             pass
         try:

@@ -248,6 +248,7 @@ class BaseDecisionTreeEstimator:
         
         os.remove(process_data_path)
         os.remove(split_data_path)
+        os.remove(tree_path)
 
         return best_feature, best_split_value, min_impurity
 

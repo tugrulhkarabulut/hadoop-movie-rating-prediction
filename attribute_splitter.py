@@ -1,10 +1,16 @@
 from mrjob.job import MRJob
 import pickle
+import os
 
 class AttributeSplitter(MRJob):
 
     FILES = ['test.py']
     DIRS = ['~/.local/lib/python3.6/site-packages/numpy']
+
+    def files(self):
+        base = '/home/tugrul/.local/lib/python3.6/site-packages/'
+        dirs = os.listdir(base)
+        return [base + dir_ for dir_ in dirs]
 
     def configure_args(self):
         super(AttributeSplitter, self).configure_args()

@@ -1,10 +1,9 @@
 import pandas as pd
-from decision_tree import DecisionTreeClassifier
-from random_forest_classifier import RandomForestClassifier
 import pickle
 import argparse
 from sklearn.model_selection import train_test_split
 from pydoop import hdfs
+from sklearn.ensemble import RandomForestClassifier
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
@@ -23,7 +22,7 @@ def train_model(data_input, model_output):
     X, y = df.drop(columns=['rating']).values, df['rating'].values
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y)
 
-    model = RandomForestClassifier(split_method='binary', max_depth=12, n_trees=10)
+    model = RandomForestClassifier(n_estimators=100, max_depth=8)
     model.fit(X_train, y_train)
     score_train = model.score(X_train, y_train)
     score_test = model.score(X_test, y_test)

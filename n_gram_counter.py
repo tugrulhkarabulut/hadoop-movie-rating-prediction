@@ -17,7 +17,7 @@ class NGramCounter(MRJob):
         words = review_summary.strip().split()
         n = self.options.n
         for i in range(len(words) - n + 1):
-            yield '_'.join(words[i : i + n - 1]), 1
+            yield '_'.join(words[i : i + n]), 1
 
     def reducer(self, key, values):
         yield key, sum(values)

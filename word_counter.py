@@ -1,6 +1,4 @@
 from mrjob.job import MRJob
-from time import time
-import sys
 
 class WordCounter(MRJob):    
     def configure_args(self):

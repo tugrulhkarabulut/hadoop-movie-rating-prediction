@@ -1,6 +1,4 @@
 from mrjob.job import MRJob
-from time import time
-import sys
 
 class NGramCounter(MRJob):    
     def configure_args(self):
@@ -16,8 +14,11 @@ class NGramCounter(MRJob):
         review_summary = splitted[int(self.options.column_index)]
         words = review_summary.strip().split()
         n = self.options.n
-        for i in range(len(words) - n + 1):
-            yield '_'.join(words[i : i + n]), 1
+        try:
+            for i in range(len(words) - n + 1):
+                yield '_'.join(words[i : i + n]), 1
+        except:
+            pass
 
     def reducer(self, key, values):
         yield key, sum(values)

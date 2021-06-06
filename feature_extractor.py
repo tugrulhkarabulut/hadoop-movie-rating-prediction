@@ -2,10 +2,10 @@ import argparse
 import pandas as pd
 from pydoop import hdfs
 
-from word_counter import WordCounter
-from inverse_document_frequency_calculator import InverseDocumentFrequencyCalculator
-from term_frequency_calculator import TermFrequencyCalculator
-from data_builder import DataBuilder
+from .word_counter import WordCounter
+from .inverse_document_frequency_calculator import InverseDocumentFrequencyCalculator
+from .term_frequency_calculator import TermFrequencyCalculator
+from .data_builder import DataBuilder
 
 
 def extract_features(input_paths, output_path, hadoop_output, max_words_summary=50, max_words_review=100, env='hadoop'):

@@ -1,0 +1,35 @@
+<div>
+    {%  include "partials/back_button.html" %}
+
+
+
+    <h3 class="mb-0">Predict an instance</h3>
+    <small>Predict and instance's rating and see similar reviews.</small>
+    <form @submit.prevent class="mt-3">
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Review Summary</label>
+            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Your review summary">
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Review Detail</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="helpfulCount" class="form-label">Helpful count</label>
+            <input type="number" class="form-control" id="helpfulCount" v-model="helpfulCount">
+        </div>
+        <div class="mb-3">
+            <label for="unhelpfulCount" class="form-label">Unhelpful count</label>
+            <input type="number" class="form-control" id="unhelpfulCount" v-model="unhelpfulCount">
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="hasSpoilers" v-model="hasSpoilers">
+            <label class="form-check-label" for="hasSpoilers">
+              Has spoilers?
+            </label>
+          </div>
+        <div class="button-group mt-3">
+            <button class="btn btn-primary" @click="predictInstance">Predict & Find Similar Reviews</button>
+        </div>
+    </form>
+</div>

@@ -19,14 +19,17 @@ def preprocess_text(df):
     df = df.str.lower()
     df = df.apply(contractions.fix)
     #df = df.apply(lambda s: "".join([ch for ch in s if ch not in string.punctuation and ch not in string.digits and ch in string.printable]))
-    df = df.apply(lambda s: re.sub('[^a-zA-Z ]+', '', s))
+    df = df.apply(lambda s: re.sub('[^a-zA-Z\!\? ]+', '', s))
     df = df.apply(lambda s: " ".join([stemmer.stem(word) for word in s.split() if word not in stop_words]))
     
     return df
 
 def preprocess_data(df):
-    df['review_summary_cleaned'] = preprocess_text(df['review_summary'])
-    df['review_detail_cleaned'] = preprocess_text(df['review_detail'])
+    df['review_summary'] = preprocess_text(df['review_summary'])
+    df['review_detail'] = preprocess_text(df['review_detail'])
+
+    df['review_summary_cleaned'] = df['review_summary'].apply(lambda s: re.sub('[^a-zA-Z ]+', '', s))
+    df['review_detail_cleaned'] = df['review_detail'].apply(lambda s: re.sub('[^a-zA-Z ]+', '', s))
 
     return df
 
@@ -56,7 +59,7 @@ if __name__ == '__main__':
     args = parse_arguments()
 
     df = pd.read_json(args.input)
-    df = df.head(250000)
+    df = df.head()
     df = df.dropna()
     df = preprocess_data(df)
     df = extract_helpful_count(df)

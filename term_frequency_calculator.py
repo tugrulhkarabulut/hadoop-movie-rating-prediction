@@ -1,4 +1,6 @@
 from mrjob.job import MRJob
+import csv
+from io import StringIO
 
 
 class TermFrequencyCalculator(MRJob):
@@ -11,7 +13,7 @@ class TermFrequencyCalculator(MRJob):
         super(TermFrequencyCalculator, self).load_args(args)
 
     def mapper(self, _, line):
-        splitted = line.split(',')
+        splitted = list(csv.reader(StringIO(line), skipinitialspace=True))[0]
         review_summary = splitted[self.options.column_index]
         review_id = splitted[0]
         words = review_summary.strip().split()

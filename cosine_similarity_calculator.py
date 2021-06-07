@@ -1,5 +1,7 @@
 from mrjob.job import MRJob
 import math
+import csv
+from io import StringIO
 
 class CosineSimilarityCalculator(MRJob):
 
@@ -15,7 +17,7 @@ class CosineSimilarityCalculator(MRJob):
         orig_doc_feats = [float(feat) for feat in self.options.split(',')]
         orig_doc_norm = math.sqrt([f ** 2 for f in orig_doc_feats])
 
-        line_values = line.split(',')
+        line_values = list(csv.reader(StringIO(line), skipinitialspace=True))[0]
         id = line_values[0]
         doc_feats = [float(feat) for feat in line_values[1:]]
         doc_norm = math.sqrt([f ** 2 for f in doc_feats])

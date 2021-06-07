@@ -1,5 +1,7 @@
 from mrjob.job import MRJob
 import math
+import csv
+from io import StringIO
 
 class InverseDocumentFrequencyCalculator(MRJob):
     @classmethod
@@ -17,7 +19,7 @@ class InverseDocumentFrequencyCalculator(MRJob):
 
 
     def mapper(self, _, line):
-        splitted = line.split(',')
+        splitted = list(csv.reader(StringIO(line), skipinitialspace=True))[0]
         review_summary = splitted[self.options.column_index]
         words = review_summary.strip().split()
         unique_words = set(words)

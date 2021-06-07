@@ -59,7 +59,7 @@ if __name__ == '__main__':
     args = parse_arguments()
 
     df = pd.read_json(args.input)
-    df = df.head()
+    df = df.head(250000)
     df = df.dropna()
     df = preprocess_data(df)
     df = extract_helpful_count(df)

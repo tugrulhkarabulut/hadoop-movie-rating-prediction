@@ -1,5 +1,7 @@
 from mrjob.job import MRJob
 import re
+import csv
+from io import StringIO
 
 class ExclamationMarkCounter(MRJob):    
     def configure_args(self):
@@ -11,7 +13,7 @@ class ExclamationMarkCounter(MRJob):
 
     def mapper(self, _, line):
         regex = r'[\?\!]'
-        splitted = line.split(',')
+        splitted = list(csv.reader(StringIO(line), skipinitialspace=True))[0]
         review_summary = splitted[int(self.options.column_index)]
         review_id = splitted[0]
 

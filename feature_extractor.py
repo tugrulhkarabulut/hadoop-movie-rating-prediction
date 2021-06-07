@@ -20,7 +20,7 @@ def extract_features(input_paths, output_path, hadoop_output, feature_types=['tf
 
     feature_data = []
     if 'tf_idf' in feature_types:
-        w = WordCounter(args=[input_paths_str, '-r', env, '--column_index', '3'])
+        w = WordCounter(args=[input_paths_str, '-r', env, '--column_index', '6'])
         summary_word_counts = {}
         with w.make_runner() as runner:
             runner.run()
@@ -28,7 +28,7 @@ def extract_features(input_paths, output_path, hadoop_output, feature_types=['tf
                 summary_word_counts[key] = value
 
 
-        w = WordCounter(args=[input_paths_str, '-r', env, '--column_index', '5'])
+        w = WordCounter(args=[input_paths_str, '-r', env, '--column_index', '7'])
         review_word_counts = {}
         with w.make_runner() as runner:
             runner.run()
@@ -49,14 +49,14 @@ def extract_features(input_paths, output_path, hadoop_output, feature_types=['tf
         with hdfs.open(input_paths_str) as f:
             n_rows = InverseDocumentFrequencyCalculator.calc_n_rows(f)
 
-        w = InverseDocumentFrequencyCalculator(args=[input_paths_str, '-r', env, '--n_rows', str(n_rows), '--column_index', '3', '--words', words_summary_str])
+        w = InverseDocumentFrequencyCalculator(args=[input_paths_str, '-r', env, '--n_rows', str(n_rows), '--column_index', '6', '--words', words_summary_str])
         word_summary_idfs = {}
         with w.make_runner() as runner:
             runner.run()
             for key, value in w.parse_output(runner.cat_output()):
                 word_summary_idfs[key] = value
 
-        w = InverseDocumentFrequencyCalculator(args=[input_paths_str, '-r', env, '--n_rows', str(n_rows), '--column_index', '5', '--words', words_review_str])
+        w = InverseDocumentFrequencyCalculator(args=[input_paths_str, '-r', env, '--n_rows', str(n_rows), '--column_index', '7', '--words', words_review_str])
         word_review_idfs = {}
         with w.make_runner() as runner:
             runner.run()
@@ -67,14 +67,14 @@ def extract_features(input_paths, output_path, hadoop_output, feature_types=['tf
         word_review_idfs = pd.DataFrame({'word': word_review_idfs.keys(), 'idf': word_review_idfs.values()})
 
 
-        w = TermFrequencyCalculator(args=[input_paths_str, '-r', env, '--column_index', '3', '--words', words_summary_str])
+        w = TermFrequencyCalculator(args=[input_paths_str, '-r', env, '--column_index', '6', '--words', words_summary_str])
         word_doc_summary_tfs = {}
         with w.make_runner() as runner:
             runner.run()
             for key, value in w.parse_output(runner.cat_output()):
                 word_doc_summary_tfs[tuple(key)] = value
 
-        w = TermFrequencyCalculator(args=[input_paths_str, '-r', env, '--column_index', '5', '--words', words_review_str])
+        w = TermFrequencyCalculator(args=[input_paths_str, '-r', env, '--column_index', '7', '--words', words_review_str])
         word_doc_review_tfs = {}
         with w.make_runner() as runner:
             runner.run()
@@ -148,14 +148,14 @@ def extract_features(input_paths, output_path, hadoop_output, feature_types=['tf
         feature_data.append(exc_doc_review_counts)
 
     if 'n_gram_count' in feature_types:
-        w = NGramCounter(args=[input_paths_str, '-r', env, '--column_index', '3'])
+        w = NGramCounter(args=[input_paths_str, '-r', env, '--column_index', '6'])
         n_gram_counts_summary = {}
         with w.make_runner() as runner:
             runner.run()
             for key, value in w.parse_output(runner.cat_output()):
                 n_gram_counts_summary[key] = value
 
-        w = NGramCounter(args=[input_paths_str, '-r', env, '--column_index', '5'])
+        w = NGramCounter(args=[input_paths_str, '-r', env, '--column_index', '7'])
         n_gram_counts_review = {}
         with w.make_runner() as runner:
             runner.run()
@@ -172,14 +172,14 @@ def extract_features(input_paths, output_path, hadoop_output, feature_types=['tf
         n_gram_review = list(review_ngram_counts.sort_values(by='count', ascending=False).iloc[:15].reset_index(drop=True)['word'])
         n_gram_review_str = ','.join(n_gram_review)
 
-        w = NGramLocalCounter(args=[input_paths_str, '-r', env, '--column_index', '3', '--n_grams', n_gram_summary_str])
+        w = NGramLocalCounter(args=[input_paths_str, '-r', env, '--column_index', '6', '--n_grams', n_gram_summary_str])
         n_gram_counts_summary = {}
         with w.make_runner() as runner:
             runner.run()
             for key, value in w.parse_output(runner.cat_output()):
                 n_gram_counts_summary[tuple(key)] = value
 
-        w = NGramLocalCounter(args=[input_paths_str, '-r', env, '--column_index', '5', '--n_grams', n_gram_review_str])
+        w = NGramLocalCounter(args=[input_paths_str, '-r', env, '--column_index', '7', '--n_grams', n_gram_review_str])
         n_gram_counts_review = {}
         with w.make_runner() as runner:
             runner.run()

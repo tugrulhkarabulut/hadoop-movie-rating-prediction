@@ -1,4 +1,6 @@
 from mrjob.job import MRJob
+import csv
+from io import StringIO
 
 class NGramCounter(MRJob):    
     def configure_args(self):
@@ -10,7 +12,7 @@ class NGramCounter(MRJob):
         super(NGramCounter, self).load_args(args)
 
     def mapper(self, _, line):
-        splitted = line.split(',')
+        splitted = list(csv.reader(StringIO(line), skipinitialspace=True))[0]
         review_summary = splitted[int(self.options.column_index)]
         words = review_summary.strip().split()
         n = self.options.n

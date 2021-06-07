@@ -14,9 +14,13 @@ def parse_arguments():
 
     return args
 
-def train_model(data_input, model_output):
-    with hdfs.open(data_input) as f:
-        df = pd.read_csv(f)
+def train_model(data_input, model_output, env):
+
+    if env == 'hadoop':
+        with hdfs.open(data_input) as f:
+            df = pd.read_csv(f)
+    else:
+        df = pd.read_csv(data_input)
     
     del df['movie']
     X, y = df.drop(columns=['rating']).values, df['rating'].values
@@ -32,6 +36,9 @@ def train_model(data_input, model_output):
 
     with open(model_output, 'wb') as f:
         pickle.dump(model, f, pickle.HIGHEST_PROTOCOL)
+
+
+    return score_train * 100, score_test * 100
 
 if __name__ == '__main__':
     args = parse_arguments()

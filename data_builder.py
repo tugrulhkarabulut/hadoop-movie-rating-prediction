@@ -19,9 +19,12 @@ class DataBuilder:
         del self.data['review_summary']
         del self.data['review_detail']
         del self.data['movie']
+        del self.data['review_summary_cleaned']
+        del self.data['review_detail_cleaned']
 
         for i, inp in enumerate(self.tf_idf_data):
-            pivot = inp.pivot_table(values='tf_idf', index=inp['review_id'], columns='word', aggfunc='first')
+            columns = inp.columns
+            pivot = inp.pivot_table(values=columns[2], index=inp['review_id'], columns=columns[0], aggfunc='first')
             pivot = pivot.add_suffix('_{}'.format(i))
             self.data = self.data.join(pivot, on='review_id', how='left')
             self.data = self.data.fillna(0)

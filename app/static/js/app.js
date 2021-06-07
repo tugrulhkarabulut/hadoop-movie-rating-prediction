@@ -10,15 +10,20 @@ var app = new Vue({
         dataId: '',
         modelNameInput: '',
         trainInProgress: false,
-        envCheck: true
+        envCheck: true,
+        timeElapsed: 0
     },
 
     methods: {
         async extractAndTrain() {
-            this.trainInProgress = true;
-            await this.extractFeatures();
-            await this.trainModel();
-            this.trainInProgress = false;
+            if (!this.featuresExtracted) {
+                timer = this.startTimer();
+                this.trainInProgress = true;
+                await this.extractFeatures();
+                //await this.trainModel();
+                this.trainInProgress = false;
+                window.clearInterval(timer);
+            }
         },
 
         async extractFeatures() {
@@ -49,7 +54,7 @@ var app = new Vue({
 
 
             axios.post('/extract', data).then(res => {
-                this.dataId = res.data.id
+                this.processName = res.data.process_name
                 this.featuresExtracted = true;
             })
 
@@ -57,11 +62,16 @@ var app = new Vue({
 
         async trainModel() {
             const data = {
-                'data_id': this.dataId,
-                'model_name': this.modelNameInput
+                'process_name': this.processName
             }    
             axios.post('/build', data);
         },
+
+        startTimer() {
+            return window.setInterval(() => {
+                this.timeElapsed += 1 
+            }, 1000)
+        }
 
         predictInstance() {
             

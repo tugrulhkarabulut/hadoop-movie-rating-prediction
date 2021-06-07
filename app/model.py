@@ -18,7 +18,6 @@ def extract():
     shutil.rmtree(process_path, ignore_errors=True)
 
     output_path = process_path + '/output.csv'
-    model_output = process_path + '/model.pickle'
     hadoop_output = '/input/' + process_name + '_output.csv'
     env = req_data['env']
     dataset_input = req_data['dataset_input']
@@ -43,15 +42,8 @@ def extract():
 
     extract_features(input_path, output_path, hadoop_output, feature_types)
 
+    response = {'process_name': process_name}
 
-    if env == 'hadoop':
-        train_input = hadoop_output
-    else:
-        train_input = output_path
-
-    train_acc, test_acc = train_model(train_input, model_output)
-
-    response = {'train_acc': train_acc, 'test_acc': test_acc}
     return response
 
 @bp.route('/build', methods=['POST'])

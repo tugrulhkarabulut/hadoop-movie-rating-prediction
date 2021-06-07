@@ -3,3 +3,4 @@
 __pycache__
 *.pickle
 *.tar.gz
+app_data

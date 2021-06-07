@@ -10,7 +10,7 @@ bp = Blueprint('model', __name__)
 
 @bp.route('/extract', methods=['POST'])
 def extract():
-    req_data = request.get_json
+    req_data = request.get_json()
     process_name = req_data['name']
     input_path = ''
     process_path = '../app_data/' + process_name

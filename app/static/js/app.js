@@ -11,7 +11,8 @@ var app = new Vue({
         modelNameInput: '',
         trainInProgress: false,
         envCheck: true,
-        timeElapsed: 0
+        timeElapsed: 0,
+        processNameInput: ''
     },
 
     methods: {
@@ -30,7 +31,8 @@ var app = new Vue({
 
             const data = {
                 'dataset_input': this.datasetInput,
-                'feature_types': []
+                'feature_types': [],
+                'name': this.processNameInput
             }
 
             if (this.envCheck) {

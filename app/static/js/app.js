@@ -71,7 +71,7 @@ var app = new Vue({
             return window.setInterval(() => {
                 this.timeElapsed += 1 
             }, 1000)
-        }
+        },
 
         predictInstance() {
             

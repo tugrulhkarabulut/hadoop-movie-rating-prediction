@@ -145,7 +145,7 @@ def extract_features(input_paths, output_path, hadoop_output, feature_types=['tf
 
 
         feature_data.append(exc_doc_summary_counts)
-        feature_data.append(exc_doc_review_counts)
+        #feature_data.append(exc_doc_review_counts)
 
     if 'n_gram_count' in feature_types:
         w = NGramCounter(args=[input_paths_str, '-r', env, '--column_index', '6'])

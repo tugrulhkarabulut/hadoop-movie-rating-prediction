@@ -25,9 +25,11 @@ class DataBuilder:
         for i, inp in enumerate(self.tf_idf_data):
             columns = inp.columns
             pivot = inp.groupby(['review_id', columns[0]])[columns[2]].first().unstack()
+            print('pivot done')
             #inp.pivot_table(values=columns[2], index=inp['review_id'], columns=columns[0], aggfunc='first')
             pivot = pivot.add_suffix('_{}'.format(i))
             self.data = self.data.join(pivot, on='review_id', how='left')
+            print('join done')
             self.data = self.data.fillna(0)
 
         del self.data['review_id']

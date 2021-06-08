@@ -7,8 +7,16 @@ bp = Blueprint('predict', __name__)
 @bp.route('/predict', methods=['POST'])
 def build():
     req_data = request.get_json()
-    a = {'id': 123}
-    return a
+    process_name = req_data['process_name']
+    process_path = './app_data/' + process_name
+
+    feature_types = []
+    with open(process_path + '/feature_types.txt') as f:
+        for line in f:
+            feature_types.append(line)
+
+    print(feature_types)
+    return {}
 
 
 @bp.route('/get-models', methods=['GET'])

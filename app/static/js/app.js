@@ -13,10 +13,27 @@ var app = new Vue({
         envCheck: true,
         timeElapsed: 0,
         processNameInput: '',
-        processName: ''
+        processName: '',
+        models: [],
+        modelInput: "",
+        summaryInput: "",
+        reviewInput: "",
+        unhelpfulCountInput: "",
+        helplfulCountInput: "",
+        hasSpoilersInput: ""
     },
 
     methods: {
+        onBuildModelClick() {
+            this.activeComp = 'build-model';
+        },
+
+        onPredictClick() {
+            this.activeComp = 'predict';
+            this.getModels();
+        },
+
+
         async extractAndTrain() {
             if (!this.featuresExtracted) {
                 timer = this.startTimer();
@@ -86,8 +103,29 @@ var app = new Vue({
             }, 1000)
         },
 
+
+        getModels() {
+            axios.get('/get-models').then(res => {
+                this.models = res.data.models
+            })
+        },
+
         predictInstance() {
-            
+            const data = {
+                'model': this.modelInput,
+                'spoiler': parseInt(this.hasSpoilersInput),
+                'summary_input': this.summaryInput,
+                'review_input': this.reviewInput,
+                'helpful_count': this.helplfulCountInput,
+                'unhelpful_count': this.unhelpfulCountInput
+            }
+
+            axios.post('/predict', data).then(res => {
+                /* const class_ = res.data.class
+                const probability = res.data.probability */
+                console.log(res.data);
+                
+            })
         }
     }
   })

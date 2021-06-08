@@ -21,6 +21,7 @@ var app = new Vue({
         unhelpfulCountInput: "",
         helpfulCountInput: "",
         hasSpoilersInput: false,
+        predictionOutput: ""
     },
 
     methods: {
@@ -121,9 +122,9 @@ var app = new Vue({
             }
 
             axios.post('/predict', data).then(res => {
-                /* const class_ = res.data.class
-                const probability = res.data.probability */
+                //const probability = res.data.probability
                 console.log(res.data);
+                this.predictionOutput = res.data.prediction;
                 
             })
         }

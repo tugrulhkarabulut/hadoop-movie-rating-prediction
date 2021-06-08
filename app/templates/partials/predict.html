@@ -37,4 +37,6 @@
             <button class="btn btn-primary" @click="predictInstance">Predict & Find Similar Reviews</button>
         </div>
     </form>
+
+    <p v-if="predictionOutput">Predicted rating is {{ predictionOutput }}</p>
 </div>

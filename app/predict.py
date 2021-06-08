@@ -124,11 +124,12 @@ def build():
 
 
     with open(process_path + '/model.pickle', 'rb') as f:
-        model = pickle.load(f, pickle.HIGHEST_PROTOCOL)
+        model = pickle.load(f)
 
-    print(model)
+    pred = model.predict([predict_input])[0]
+    res = {'prediction': pred}
 
-    return {}
+    return res
 
 
 @bp.route('/get-models', methods=['GET'])

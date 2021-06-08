@@ -13,7 +13,7 @@ def build():
     feature_types = []
     with open(process_path + '/feature_types.txt') as f:
         for line in f:
-            feature_types.append(line)
+            feature_types.append(line[:-1])
 
     print(feature_types)
     return {}

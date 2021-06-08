@@ -29,20 +29,15 @@ def extract():
             f.write(feat + '\n')
 
     if dataset_input == 'small':
-        input_path = 'hdfs:///input/preprocessed_sample.csv'
+        if env == 'multi':
+            input_path = 'hdfs:///input/preprocessed_sample.csv'
+        else:
+            input_path = 'hdfs:///input/preprocessed_sample_single.csv'
     else:
-        input_path = 'hdfs:///input/preprocessed_part1.csv'
-
-
-    if env == 'local':
-        with hdfs.open(input_path) as f:
-            if dataset_input == 'small':
-                input_path = process_path + '/preprocessed_sample.csv'
-                pd.read_csv(f).to_csv(input_path)
-            else:
-                input_path = process_path + '/preprocessed_part1.csv'
-                pd.read_csv(f).to_csv(input_path)
-
+        if env == 'multi':
+            input_path = 'hdfs:///input/preprocessed_part1.csv'
+        else:
+            input_path = 'hdfs:///input/preprocessed_part1_single.csv'
 
 
     extract_features(process_path, input_path, hadoop_output, feature_types)
@@ -57,15 +52,11 @@ def build():
     req_data = request.get_json()
     process_name = req_data['process_name']
     process_path = './app_data/' + process_name
-    env = req_data['env']
     model_output = process_path + '/model.pickle'
 
-    if env == 'hadoop':
-        train_input = '/input/' + process_name + '_output.csv'
-    else:
-        train_input = process_path + '/output.csv'
+    train_input = '/input/' + process_name + '_output.csv'
 
-    train_acc, test_acc = train_model(train_input, model_output, env)
+    train_acc, test_acc = train_model(train_input, model_output)
 
     response = {'train_acc': train_acc, 'test_acc': test_acc}
     return response

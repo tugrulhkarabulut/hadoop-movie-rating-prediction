@@ -55,9 +55,9 @@ var app = new Vue({
             }
 
             if (this.envCheck) {
-                data.env = 'hadoop'
+                data.env = 'single'
             } else {
-                data.env = 'local'
+                data.env = 'multi'
             }
 
             
@@ -84,12 +84,6 @@ var app = new Vue({
         async trainModel() {
             const data = {
                 'process_name': this.processName,
-            }
-
-            if (this.envCheck) {
-                data.env = 'hadoop'
-            } else {
-                data.env = 'local'
             }
 
             const res = await axios.post('/build', data);

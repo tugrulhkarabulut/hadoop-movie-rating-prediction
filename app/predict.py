@@ -146,3 +146,9 @@ def get_models():
     res['models'] = models
 
     return res
+
+
+@bp.route('/find-similar', methods=['POST'])
+def find_similar():
+    req_data = request.get_json()
+    return req_data

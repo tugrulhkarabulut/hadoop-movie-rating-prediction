@@ -56,7 +56,7 @@ var app = new Vue({
             }
 
 
-            axios.post('/extract', data).then(res => {
+            await axios.post('/extract', data).then(res => {
                 this.processName = res.data.process_name
                 this.featuresExtracted = true;
             })
@@ -65,9 +65,18 @@ var app = new Vue({
 
         async trainModel() {
             const data = {
-                'process_name': this.processName
-            }    
-            axios.post('/build', data);
+                'process_name': this.processName,
+            }
+
+            if (this.envCheck) {
+                data.env = 'hadoop'
+            } else {
+                data.env = 'local'
+            }
+
+            const res = await axios.post('/build', data);
+
+            console.log(res.data);
         },
 
         startTimer() {

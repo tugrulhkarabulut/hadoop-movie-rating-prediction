@@ -14,7 +14,7 @@ def extract():
     req_data = request.get_json()
     process_name = req_data['name']
     input_path = ''
-    process_path = '../app_data/' + process_name
+    process_path = './app_data/' + process_name
 
     shutil.rmtree(process_path, ignore_errors=True)
     os.mkdir(process_path)
@@ -53,7 +53,7 @@ def build():
 
     req_data = request.get_json()
     process_name = req_data['process_name']
-    process_path = '../app_data/' + process_name
+    process_path = './app_data/' + process_name
     env = req_data['env']
     model_output = process_path + '/model.pickle'
 

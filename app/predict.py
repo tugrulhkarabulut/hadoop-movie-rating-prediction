@@ -4,6 +4,8 @@ import os
 import pandas as pd
 import re
 import numpy as np
+import pickle
+from sklearn.ensemble import RandomForestClassifier
 
 from ..processing import preprocess_single
 
@@ -21,7 +23,7 @@ def tf_idf(words, idf):
     tf_idfs = []
     for word in idf.index:
         if word in word_counts:
-            tf_idfs.append(word_counts[word] / len(words) * idf.iloc[word]['idf'])
+            tf_idfs.append(word_counts[word] / len(words) * idf.loc[word]['idf'])
         else:
             tf_idfs.append(0)
 
@@ -119,6 +121,12 @@ def build():
 
 
     print(predict_input)
+
+
+    with open(process_path + '/model.pickle', 'rb') as f:
+        model = pickle.load(f, pickle.HIGHEST_PROTOCOL)
+
+    print(model)
 
     return {}
 

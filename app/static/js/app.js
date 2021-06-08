@@ -19,7 +19,7 @@ var app = new Vue({
         summaryInput: "",
         reviewInput: "",
         unhelpfulCountInput: "",
-        helplfulCountInput: "",
+        helpfulCountInput: "",
         hasSpoilersInput: ""
     },
 
@@ -116,7 +116,7 @@ var app = new Vue({
                 'spoiler': parseInt(this.hasSpoilersInput),
                 'summary_input': this.summaryInput,
                 'review_input': this.reviewInput,
-                'helpful_count': this.helplfulCountInput,
+                'helpful_count': this.helpfulCountInput,
                 'unhelpful_count': this.unhelpfulCountInput
             }
 

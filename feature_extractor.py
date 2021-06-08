@@ -143,7 +143,6 @@ def extract_features(input_paths, output_path, hadoop_output, feature_types=['tf
         exc_doc_summary_counts = pd.DataFrame({'review_id': summary_exc_review_ids,  'exc': summary_excs, 'count': exclamation_mark_counts_summary.values()})
         exc_doc_review_counts = pd.DataFrame({'review_id': review_exc_review_ids, 'exc': review_excs, 'count': exclamation_mark_counts_review.values()})
 
-
         feature_data.append(exc_doc_summary_counts)
         #feature_data.append(exc_doc_review_counts)
 

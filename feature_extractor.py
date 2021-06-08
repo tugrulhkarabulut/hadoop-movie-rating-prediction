@@ -221,7 +221,7 @@ def extract_features(process_path, input_paths, hadoop_output, feature_types=['t
     builder.save(process_path + '/output.csv')
 
     if env == 'hadoop':
-        hdfs.put(output_path, hadoop_output)
+        hdfs.put(process_path + '/output.csv', hadoop_output)
 
     
 def parse_arguments():

@@ -22,7 +22,6 @@ def train_model(data_input, model_output, env):
     else:
         df = pd.read_csv(data_input)
     
-    del df['movie']
     X, y = df.drop(columns=['rating']).values, df['rating'].values
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y)
 

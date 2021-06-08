@@ -80,6 +80,7 @@ var app = new Vue({
         },
 
         startTimer() {
+            this.timeElapsed = 0;
             return window.setInterval(() => {
                 this.timeElapsed += 1 
             }, 1000)

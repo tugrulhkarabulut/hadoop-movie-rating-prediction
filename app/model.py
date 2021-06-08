@@ -58,9 +58,9 @@ def build():
     model_output = process_path + '/model.pickle'
 
     if env == 'hadoop':
-        train_input = process_path + '/output.csv'
-    else:
         train_input = '/input/' + process_name + '_output.csv'
+    else:
+        train_input = process_path + '/output.csv'
 
     train_acc, test_acc = train_model(train_input, model_output, env)
 

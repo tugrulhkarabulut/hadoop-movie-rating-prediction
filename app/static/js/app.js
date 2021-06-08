@@ -12,7 +12,8 @@ var app = new Vue({
         trainInProgress: false,
         envCheck: true,
         timeElapsed: 0,
-        processNameInput: ''
+        processNameInput: '',
+        processName: ''
     },
 
     methods: {
@@ -21,7 +22,7 @@ var app = new Vue({
                 timer = this.startTimer();
                 this.trainInProgress = true;
                 await this.extractFeatures();
-                //await this.trainModel();
+                await this.trainModel();
                 this.trainInProgress = false;
                 window.clearInterval(timer);
             }

@@ -24,7 +24,7 @@ def extract():
     dataset_input = req_data['dataset_input']
     feature_types = req_data['feature_types'] 
 
-    with open(process_path + '/feature_types.txt') as f:
+    with open(process_path + '/feature_types.txt', 'w') as f:
         for feat in feature_types:
             f.write(feat + '\n')
 

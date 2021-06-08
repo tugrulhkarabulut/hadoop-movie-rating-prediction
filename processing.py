@@ -20,7 +20,7 @@ def preprocess_single(txt):
     txt = contractions.fix(txt)
     #df = df.apply(lambda s: "".join([ch for ch in s if ch not in string.punctuation and ch not in string.digits and ch in string.printable]))
     txt = re.sub('[^a-zA-Z\!\? ]+', '', txt)
-    txt = " ".join([stemmer.stem(word) for word in s.split() if word not in stop_words])
+    txt = " ".join([stemmer.stem(word) for word in txt.split() if word not in stop_words])
     
     return txt
 

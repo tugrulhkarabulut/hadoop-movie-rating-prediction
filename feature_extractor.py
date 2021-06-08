@@ -10,7 +10,7 @@ from .n_gram_counter import NGramCounter
 from .n_gram_local_counter import NGramLocalCounter
 from .data_builder import DataBuilder
 
-def extract_features(input_paths, output_path, hadoop_output, feature_types=['tf_idf', 'exclamation', 'n_gram_count'], max_words_summary=50, max_words_review=100, env='hadoop'):
+def extract_features(process_path, input_paths, hadoop_output, feature_types=['tf_idf', 'exclamation', 'n_gram_count'], max_words_summary=10, max_words_review=20, env='hadoop'):
     input_paths_str = ''
     if isinstance(input_paths, list):
         input_paths_str = ','.join(input_paths_str)
@@ -65,6 +65,9 @@ def extract_features(input_paths, output_path, hadoop_output, feature_types=['tf
 
         word_summary_idfs = pd.DataFrame({'word': word_summary_idfs.keys(), 'idf': word_summary_idfs.values()})
         word_review_idfs = pd.DataFrame({'word': word_review_idfs.keys(), 'idf': word_review_idfs.values()})
+
+        word_summary_idfs.to_csv(process_path + '/idf_summary.csv', index=False)
+        word_review_idfs.to_csv(process_path + '/idf_review.csv', index=False)
 
 
         w = TermFrequencyCalculator(args=[input_paths_str, '-r', env, '--column_index', '6', '--words', words_summary_str])
@@ -144,7 +147,7 @@ def extract_features(input_paths, output_path, hadoop_output, feature_types=['tf
         exc_doc_review_counts = pd.DataFrame({'review_id': review_exc_review_ids, 'exc': review_excs, 'count': exclamation_mark_counts_review.values()})
 
         feature_data.append(exc_doc_summary_counts)
-        #feature_data.append(exc_doc_review_counts)
+        feature_data.append(exc_doc_review_counts)
 
     if 'n_gram_count' in feature_types:
         w = NGramCounter(args=[input_paths_str, '-r', env, '--column_index', '6'])
@@ -215,7 +218,7 @@ def extract_features(input_paths, output_path, hadoop_output, feature_types=['tf
 
     print('train data is built')
 
-    builder.save(output_path)
+    builder.save(process_path + '/output.csv')
 
     if env == 'hadoop':
         hdfs.put(output_path, hadoop_output)

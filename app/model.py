@@ -19,11 +19,14 @@ def extract():
     shutil.rmtree(process_path, ignore_errors=True)
     os.mkdir(process_path)
 
-    output_path = process_path + '/output.csv'
     hadoop_output = '/input/' + process_name + '_output.csv'
     env = req_data['env']
     dataset_input = req_data['dataset_input']
-    feature_types = req_data['feature_types']
+    feature_types = req_data['feature_types'] 
+
+    with open(process_path + '/feature_types.txt') as f:
+        for feat in feature_types:
+            f.write(feat + '\n')
 
     if dataset_input == 'small':
         input_path = 'hdfs:///input/preprocessed_sample.csv'
@@ -42,7 +45,7 @@ def extract():
 
 
 
-    extract_features(input_path, output_path, hadoop_output, feature_types)
+    extract_features(process_path, input_path, hadoop_output, feature_types)
 
     response = {'process_name': process_name}
 

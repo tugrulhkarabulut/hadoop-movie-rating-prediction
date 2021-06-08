@@ -4,6 +4,7 @@ from ..feature_extractor import *
 from ..train_model import *
 from pydoop import hdfs
 import shutil
+import os
 
 bp = Blueprint('model', __name__)
 
@@ -16,6 +17,7 @@ def extract():
     process_path = '../app_data/' + process_name
 
     shutil.rmtree(process_path, ignore_errors=True)
+    os.mkdir(process_path)
 
     output_path = process_path + '/output.csv'
     hadoop_output = '/input/' + process_name + '_output.csv'

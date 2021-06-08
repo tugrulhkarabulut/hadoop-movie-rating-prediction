@@ -13,6 +13,17 @@ stop_words = stopwords.words('english')
 tqdm.pandas()
 
 
+def preprocess_single(txt):
+    stemmer = PorterStemmer()
+
+    txt = txt.lower()
+    txt = contractions.fix(txt)
+    #df = df.apply(lambda s: "".join([ch for ch in s if ch not in string.punctuation and ch not in string.digits and ch in string.printable]))
+    txt = re.sub('[^a-zA-Z\!\? ]+', '', txt)
+    txt = " ".join([stemmer.stem(word) for word in s.split() if word not in stop_words])
+    
+    return txt
+
 def preprocess_text(df):
     stemmer = PorterStemmer()
 

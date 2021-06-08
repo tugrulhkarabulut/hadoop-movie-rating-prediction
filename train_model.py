@@ -1,3 +1,4 @@
+from random import random
 import pandas as pd
 import pickle
 import argparse
@@ -23,7 +24,7 @@ def train_model(data_input, model_output, env):
         df = pd.read_csv(data_input)
     
     X, y = df.drop(columns=['rating']).values, df['rating'].values
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=1)
 
     model = RandomForestClassifier(n_estimators=100, max_depth=8)
     model.fit(X_train, y_train)

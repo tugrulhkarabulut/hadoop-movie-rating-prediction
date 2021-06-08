@@ -66,8 +66,11 @@ def extract_features(process_path, input_paths, hadoop_output, feature_types=['t
         word_summary_idfs = pd.DataFrame({'word': word_summary_idfs.keys(), 'idf': word_summary_idfs.values()})
         word_review_idfs = pd.DataFrame({'word': word_review_idfs.keys(), 'idf': word_review_idfs.values()})
 
-        word_summary_idfs.to_csv(process_path + '/idf_summary.csv', index=False)
-        word_review_idfs.to_csv(process_path + '/idf_review.csv', index=False)
+
+        word_summary_idfs_subset = word_summary_idfs[word_summary_idfs['word'].isin(words_summary)]
+        word_review_idfs_subset = word_review_idfs[word_review_idfs['word'].isin(words_review)]
+        word_summary_idfs_subset.to_csv(process_path + '/idf_summary.csv', index=False)
+        word_review_idfs_subset.to_csv(process_path + '/idf_review.csv', index=False)
 
 
         w = TermFrequencyCalculator(args=[input_paths_str, '-r', env, '--column_index', '6', '--words', words_summary_str])
@@ -174,6 +177,12 @@ def extract_features(process_path, input_paths, hadoop_output, feature_types=['t
         n_gram_review = list(review_ngram_counts.sort_values(by='count', ascending=False).iloc[:15].reset_index(drop=True)['word'])
         n_gram_review_str = ','.join(n_gram_review)
 
+
+        summary_ngram_counts_subset = summary_ngram_counts[summary_ngram_counts['word'].isin(n_gram_summary)][['word']]
+        review_ngram_counts_subset = review_ngram_counts[review_ngram_counts['word'].isin(n_gram_review)][['word']]
+        summary_ngram_counts_subset.to_csv(process_path + '/summary_n_grams.csv', index=False)
+        review_ngram_counts_subset.to_csv(process_path + '/review_n_grams.csv', index=False)
+
         w = NGramLocalCounter(args=[input_paths_str, '-r', env, '--column_index', '6', '--n_grams', n_gram_summary_str])
         n_gram_counts_summary = {}
         with w.make_runner() as runner:
@@ -199,6 +208,7 @@ def extract_features(process_path, input_paths, hadoop_output, feature_types=['t
 
         summary_n_gram_counts = pd.DataFrame({'review_id': summary_n_gram_review_ids,  'n_gram': summary_ngrams, 'count': n_gram_counts_summary.values()})
         review_n_gram_counts = pd.DataFrame({'review_id': review_n_gram_review_ids, 'n_gram': review_ngrams, 'count': n_gram_counts_review.values()})
+
 
         feature_data.append(summary_n_gram_counts)
         feature_data.append(review_n_gram_counts)

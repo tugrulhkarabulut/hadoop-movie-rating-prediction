@@ -20,7 +20,7 @@ var app = new Vue({
         reviewInput: "",
         unhelpfulCountInput: "",
         helpfulCountInput: "",
-        hasSpoilersInput: ""
+        hasSpoilersInput: false,
     },
 
     methods: {
@@ -113,7 +113,7 @@ var app = new Vue({
         predictInstance() {
             const data = {
                 'model': this.modelInput,
-                'spoiler': parseInt(this.hasSpoilersInput),
+                'spoiler': this.hasSpoilersInput,
                 'summary_input': this.summaryInput,
                 'review_input': this.reviewInput,
                 'helpful_count': this.helpfulCountInput,

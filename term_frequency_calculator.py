@@ -17,8 +17,11 @@ class TermFrequencyCalculator(MRJob):
         review_summary = splitted[self.options.column_index]
         review_id = splitted[0]
         words = review_summary.strip().split()
+        tf_words = self.options.words.split(',')
+        words = [word for word in words if word in tf_words]
+
         for word in words:
-            if word in self.options.words.split(','):
+            if word in tf_words:
                 yield (review_id, word), 1 / len(words)
 
     def reducer(self, key, values):

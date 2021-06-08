@@ -21,7 +21,7 @@ def tf_idf(words, idf):
     tf_idfs = []
     for word in idf.index:
         if word in word_counts:
-            tf_idfs.append(word_counts[word] / len(words) * idf[word]['idf'])
+            tf_idfs.append(word_counts[word] / len(words) * idf.iloc[word]['idf'])
         else:
             tf_idfs.append(0)
 

@@ -21,7 +21,8 @@ var app = new Vue({
         unhelpfulCountInput: "",
         helpfulCountInput: "",
         hasSpoilersInput: false,
-        predictionOutput: ""
+        predictionOutput: "",
+        mostSimilar: []
     },
 
     methods: {
@@ -119,6 +120,7 @@ var app = new Vue({
                 //const probability = res.data.probability
                 console.log(res.data);
                 this.predictionOutput = res.data.prediction;
+                this.mostSimilar = res.data.most_similar;
                 
             })
         }

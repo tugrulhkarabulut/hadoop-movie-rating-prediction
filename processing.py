@@ -36,8 +36,9 @@ def preprocess_text(df):
     return df
 
 def preprocess_data(df):
-    df['review_summary'] = preprocess_text(df['review_summary'])
-    df['review_detail'] = preprocess_text(df['review_detail'])
+    df.rename(columns={"review_summary": "review_summary_orig", "review_detail": "review_detail_orig"}, inplace=True)
+    df['review_summary'] = preprocess_text(df['review_summary_orig'])
+    df['review_detail'] = preprocess_text(df['review_detail_orig'])
 
     df['review_summary_cleaned'] = df['review_summary'].apply(lambda s: re.sub('[^a-zA-Z ]+', '', s))
     df['review_detail_cleaned'] = df['review_detail'].apply(lambda s: re.sub('[^a-zA-Z ]+', '', s))

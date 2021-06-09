@@ -123,14 +123,14 @@ def extract_features(process_path, input_paths, hadoop_output, feature_types=['t
 
 
     if 'exclamation' in feature_types:
-        w = ExclamationMarkCounter(args=[input_paths_str, '-r', env, '--column_index', '3'])
+        w = ExclamationMarkCounter(args=[input_paths_str, '-r', env, '--column_index', '8'])
         exclamation_mark_counts_summary = {}
         with w.make_runner() as runner:
             runner.run()
             for key, value in w.parse_output(runner.cat_output()):
                 exclamation_mark_counts_summary[tuple(key)] = value
 
-        w = ExclamationMarkCounter(args=[input_paths_str, '-r', env, '--column_index', '5'])
+        w = ExclamationMarkCounter(args=[input_paths_str, '-r', env, '--column_index', '9'])
         exclamation_mark_counts_review = {}
         with w.make_runner() as runner:
             runner.run()

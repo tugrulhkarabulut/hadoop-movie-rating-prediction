@@ -33,20 +33,22 @@
 
         <header class="masthead d-flex info" id="similar-table" v-ref="similarTable" v-if="mostSimilar.length > 0">
             <div class="container bg-white p-4">
-                <p v-if="predictionOutput" class="mb-3">Predicted rating is {{ predictionOutput }}</p>
-                <h3>Most Similar Items</h3>
                 <div class="row justify-content-center">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Movie</th>
-                                <th scope="col">Review Summary</th>
-                                <th scope="col">Review Detail</th>
-                                <th scope="col">Spoiler</th>
-                                <th scope="col">Helpful & Unhelpful</th>
-                            </tr>
-                        </thead>
-                    </table>
+                    <p v-if="predictionOutput" class="mb-3">Predicted rating is {{ predictionOutput }}</p>
+                    <h3>Most Similar Items</h3>
+                    <div class="col-6 justify-content-center">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Movie</th>
+                                    <th scope="col">Review Summary</th>
+                                    <th scope="col">Review Detail</th>
+                                    <th scope="col">Spoiler</th>
+                                    <th scope="col">Helpful & Unhelpful</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </header>

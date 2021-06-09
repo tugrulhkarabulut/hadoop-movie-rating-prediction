@@ -33,7 +33,7 @@
 
         <header class="masthead d-flex info" id="similar-table" ref="similarTable" :class="{ 'active': mostSimilar.length > 0 }">
             <div class="container" v-if="mostSimilar.length > 0">
-                <div class="row justify-content-center">
+                <div class="row justify-content-center align-items-center">
                     <div class="col-6 justify-content-center container bg-white p-4">
                         <p v-if="predictionOutput" class="mb-3">Predicted rating is {{ predictionOutput }}</p>
                         <h3>Most Similar Items</h3>
@@ -44,9 +44,20 @@
                                     <th scope="col">Review Summary</th>
                                     <th scope="col">Review Detail</th>
                                     <th scope="col">Spoiler</th>
-                                    <th scope="col">Helpful & Unhelpful</th>
+                                    <th scope="col">Helpful Ratio</th>
+                                    <th scope="col">Rating</th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                <tr v-for="item in mostSimilar">
+                                    <td>{{ item[1] }}</td>
+                                    <td>{{ item[3] }}</td>
+                                    <td>{{ item[5] }}</td>
+                                    <td>{{ item[2] }}</td>
+                                    <td>{{ item[10] }}</td>
+                                    <td>{{ item[2] }}</td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>

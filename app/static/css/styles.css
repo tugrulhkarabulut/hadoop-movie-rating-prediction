@@ -11018,6 +11018,7 @@ footer.footer .social-link:hover {
 }
 .masthead.info.active {
   min-height: 30rem;
+  height: 100vh;
 }
 .masthead h1, .masthead .h1 {
   font-size: 4rem;

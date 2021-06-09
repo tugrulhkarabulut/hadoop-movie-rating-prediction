@@ -20,7 +20,7 @@ class CosineSimilarityCalculator(MRJob):
 
             line_values = list(csv.reader(StringIO(line), skipinitialspace=True))[0]
             id = line_values[0]
-            doc_feats = [float(feat) for feat in line_values[1:]]
+            doc_feats = [float(feat) for feat in line_values[2:]]
             doc_norm = math.sqrt(sum([f ** 2 for f in doc_feats]))
             for i in range(len(doc_feats)):
                 norm_multiple = orig_doc_norm * doc_norm

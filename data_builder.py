@@ -28,8 +28,3 @@ class DataBuilder:
 
     def save(self, output_path):
         self.data.to_csv(output_path, index=False)
-
-if __name__ == '__main__':
-    builder = DataBuilder('preprocessed_sample.csv', ['tf_idf_review.csv', 'tf_idf_summary.csv'])
-    builder.build()
-    builder.save('train_data.csv')

@@ -64,6 +64,6 @@
         Model</button>
     </div>
 
-    <span class="d-block mt-3">{{ secondsElapsed }} seconds passed</span>
+    <span class="d-block mt-3" v-if="timeElapsed">{{ timeElapsed }} seconds passed</span>
   </form>
 </div>

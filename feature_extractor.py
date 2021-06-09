@@ -20,7 +20,7 @@ def extract_features(process_path, input_paths, hadoop_output, feature_types=['t
 
     feature_data = []
     if 'tf_idf' in feature_types:
-        w = WordCounter(args=[input_paths_str, '-r', env, '--column_index', '6'])
+        w = WordCounter(args=[input_paths_str, '-r', env, '--column_index', '8'])
         summary_word_counts = {}
         with w.make_runner() as runner:
             runner.run()
@@ -28,7 +28,7 @@ def extract_features(process_path, input_paths, hadoop_output, feature_types=['t
                 summary_word_counts[key] = value
 
 
-        w = WordCounter(args=[input_paths_str, '-r', env, '--column_index', '7'])
+        w = WordCounter(args=[input_paths_str, '-r', env, '--column_index', '9'])
         review_word_counts = {}
         with w.make_runner() as runner:
             runner.run()
@@ -49,14 +49,14 @@ def extract_features(process_path, input_paths, hadoop_output, feature_types=['t
         with hdfs.open(input_paths_str) as f:
             n_rows = InverseDocumentFrequencyCalculator.calc_n_rows(f)
 
-        w = InverseDocumentFrequencyCalculator(args=[input_paths_str, '-r', env, '--n_rows', str(n_rows), '--column_index', '6', '--words', words_summary_str])
+        w = InverseDocumentFrequencyCalculator(args=[input_paths_str, '-r', env, '--n_rows', str(n_rows), '--column_index', '8', '--words', words_summary_str])
         word_summary_idfs = {}
         with w.make_runner() as runner:
             runner.run()
             for key, value in w.parse_output(runner.cat_output()):
                 word_summary_idfs[key] = value
 
-        w = InverseDocumentFrequencyCalculator(args=[input_paths_str, '-r', env, '--n_rows', str(n_rows), '--column_index', '7', '--words', words_review_str])
+        w = InverseDocumentFrequencyCalculator(args=[input_paths_str, '-r', env, '--n_rows', str(n_rows), '--column_index', '9', '--words', words_review_str])
         word_review_idfs = {}
         with w.make_runner() as runner:
             runner.run()
@@ -73,14 +73,14 @@ def extract_features(process_path, input_paths, hadoop_output, feature_types=['t
         word_review_idfs_subset.to_csv(process_path + '/idf_review.csv', index=False)
 
 
-        w = TermFrequencyCalculator(args=[input_paths_str, '-r', env, '--column_index', '6', '--words', words_summary_str])
+        w = TermFrequencyCalculator(args=[input_paths_str, '-r', env, '--column_index', '8', '--words', words_summary_str])
         word_doc_summary_tfs = {}
         with w.make_runner() as runner:
             runner.run()
             for key, value in w.parse_output(runner.cat_output()):
                 word_doc_summary_tfs[tuple(key)] = value
 
-        w = TermFrequencyCalculator(args=[input_paths_str, '-r', env, '--column_index', '7', '--words', words_review_str])
+        w = TermFrequencyCalculator(args=[input_paths_str, '-r', env, '--column_index', '9', '--words', words_review_str])
         word_doc_review_tfs = {}
         with w.make_runner() as runner:
             runner.run()
@@ -123,14 +123,14 @@ def extract_features(process_path, input_paths, hadoop_output, feature_types=['t
 
 
     if 'exclamation' in feature_types:
-        w = ExclamationMarkCounter(args=[input_paths_str, '-r', env, '--column_index', '8'])
+        w = ExclamationMarkCounter(args=[input_paths_str, '-r', env, '--column_index', '7'])
         exclamation_mark_counts_summary = {}
         with w.make_runner() as runner:
             runner.run()
             for key, value in w.parse_output(runner.cat_output()):
                 exclamation_mark_counts_summary[tuple(key)] = value
 
-        w = ExclamationMarkCounter(args=[input_paths_str, '-r', env, '--column_index', '9'])
+        w = ExclamationMarkCounter(args=[input_paths_str, '-r', env, '--column_index', '8'])
         exclamation_mark_counts_review = {}
         with w.make_runner() as runner:
             runner.run()
@@ -153,14 +153,14 @@ def extract_features(process_path, input_paths, hadoop_output, feature_types=['t
         feature_data.append(exc_doc_review_counts)
 
     if 'n_gram_count' in feature_types:
-        w = NGramCounter(args=[input_paths_str, '-r', env, '--column_index', '6'])
+        w = NGramCounter(args=[input_paths_str, '-r', env, '--column_index', '8'])
         n_gram_counts_summary = {}
         with w.make_runner() as runner:
             runner.run()
             for key, value in w.parse_output(runner.cat_output()):
                 n_gram_counts_summary[key] = value
 
-        w = NGramCounter(args=[input_paths_str, '-r', env, '--column_index', '7'])
+        w = NGramCounter(args=[input_paths_str, '-r', env, '--column_index', '9'])
         n_gram_counts_review = {}
         with w.make_runner() as runner:
             runner.run()
@@ -183,14 +183,14 @@ def extract_features(process_path, input_paths, hadoop_output, feature_types=['t
         summary_ngram_counts_subset.to_csv(process_path + '/summary_n_grams.csv', index=False)
         review_ngram_counts_subset.to_csv(process_path + '/review_n_grams.csv', index=False)
 
-        w = NGramLocalCounter(args=[input_paths_str, '-r', env, '--column_index', '6', '--n_grams', n_gram_summary_str])
+        w = NGramLocalCounter(args=[input_paths_str, '-r', env, '--column_index', '8', '--n_grams', n_gram_summary_str])
         n_gram_counts_summary = {}
         with w.make_runner() as runner:
             runner.run()
             for key, value in w.parse_output(runner.cat_output()):
                 n_gram_counts_summary[tuple(key)] = value
 
-        w = NGramLocalCounter(args=[input_paths_str, '-r', env, '--column_index', '7', '--n_grams', n_gram_review_str])
+        w = NGramLocalCounter(args=[input_paths_str, '-r', env, '--column_index', '9', '--n_grams', n_gram_review_str])
         n_gram_counts_review = {}
         with w.make_runner() as runner:
             runner.run()

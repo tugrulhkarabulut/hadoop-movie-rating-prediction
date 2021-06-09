@@ -19,8 +19,8 @@ def train_model(data_input, model_output):
 
     with hdfs.open(data_input) as f:
         df = pd.read_csv(f)
-    
-    X, y = df.drop(columns=['rating']).values, df['rating'].values
+
+    X, y = df.drop(columns=['rating', 'review_id']).values, df['rating'].values
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=1)
 
     model = RandomForestClassifier(n_estimators=600, max_depth=12, class_weight='balanced_subsample')

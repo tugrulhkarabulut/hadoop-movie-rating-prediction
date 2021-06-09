@@ -10,7 +10,7 @@ var app = new Vue({
         dataId: '',
         modelNameInput: '',
         trainInProgress: false,
-        envCheck: true,
+        envCheck: false,
         timeElapsed: 0,
         processNameInput: '',
         processName: '',

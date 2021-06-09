@@ -135,6 +135,7 @@ var app = new Vue({
 
             window.clearInterval(timer);
             this.predictInProgress = false;
+            this.$refs.similarTable.scrollIntoView({ 'behavior': 'smooth' })
         }
     }
   })

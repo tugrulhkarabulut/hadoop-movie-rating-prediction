@@ -30,7 +30,7 @@ class CosineSimilarityCalculator(MRJob):
 
                 yield id, orig_doc_feats[i] * doc_feats[i] / (orig_doc_norm * doc_norm)
         except Exception as e:
-            print(e)
+            pass
         
     def reducer(self, key, values):
         yield key, math.cos(sum(values))

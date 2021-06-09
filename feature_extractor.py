@@ -5,7 +5,7 @@ from pydoop import hdfs
 from .word_counter import WordCounter
 from .inverse_document_frequency_calculator import InverseDocumentFrequencyCalculator
 from .term_frequency_calculator import TermFrequencyCalculator
-from .exlamation_mark_counter import ExclamationMarkCounter
+from .exclamation_mark_counter import ExclamationMarkCounter
 from .n_gram_counter import NGramCounter
 from .n_gram_local_counter import NGramLocalCounter
 from .data_builder import DataBuilder

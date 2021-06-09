@@ -31,6 +31,7 @@ def tf_idf(words, idf):
     return tf_idfs
 
 def find_similar(predict_input, data_input):
+    predict_input = [str(inp) for inp in predict_input]
     w = CosineSimilarityCalculator(args=[data_input, '--doc_features', ','.join(predict_input)])
     cos_similarities = {}
     with w.make_runner() as runner:

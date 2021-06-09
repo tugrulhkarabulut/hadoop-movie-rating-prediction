@@ -49,9 +49,11 @@ def find_similar(predict_input, data_input, input_path):
         df = pd.read_csv(f)
 
     most_similar = df[df['review_id'].isin(top_5)]
-    print(most_similar.shape)
+    most_similar_list = []
+    for ms in most_similar:
+        most_similar_list.append(list(ms))
 
-    return top_5
+    return most_similar_list
 
 
 @bp.route('/predict', methods=['POST'])
@@ -160,7 +162,6 @@ def build():
 
     top_5 = find_similar(predict_input, hadoop_output, input_path)
 
-    print(top_5)
     res['most_similar'] = top_5
 
     return res

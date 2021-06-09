@@ -3,7 +3,6 @@ from flask import request
 import os
 import pandas as pd
 import re
-import numpy as np
 import pickle
 from sklearn.ensemble import RandomForestClassifier
 
@@ -32,7 +31,7 @@ def tf_idf(words, idf):
 
 def find_similar(predict_input, data_input):
     predict_input = [str(inp) for inp in predict_input]
-    w = CosineSimilarityCalculator(args=[data_input, '--doc_features', ','.join(predict_input)])
+    w = CosineSimilarityCalculator(args=[data_input, '-r', 'hadoop', '--doc_features', ','.join(predict_input)])
     cos_similarities = {}
     with w.make_runner() as runner:
         runner.run()
@@ -146,7 +145,7 @@ def build():
 
     df_similarity = find_similar(predict_input, process_path + '/output.csv')
     df_similarity.sort_values(by='similarity', ascending=False, inplace=True)
-    top_5 = df_similarity.head()['review_id']
+    top_5 = list(df_similarity.head()['review_id'])
 
     print(top_5)
     res['most_similar'] = top_5

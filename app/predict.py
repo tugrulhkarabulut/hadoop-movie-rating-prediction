@@ -50,7 +50,7 @@ def find_similar(predict_input, data_input, input_path):
 
     most_similar = df[df['review_id'].isin(top_5)]
     most_similar_list = []
-    for ms in most_similar:
+    for _, ms in most_similar.iterrows():
         most_similar_list.append(list(ms))
 
     return most_similar_list

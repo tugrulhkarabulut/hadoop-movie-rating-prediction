@@ -217,9 +217,9 @@ def extract_features(process_path, input_paths, hadoop_output, feature_types=['t
 
     if env == 'hadoop':
         with hdfs.open(input_paths_str) as f:
-            builder.data = pd.read_csv(f)
+            builder.data = pd.read_csv(f, usecols=['review_id', 'rating', 'spoiler_tag', 'helpful_ratio'])
     else:
-        builder.data = pd.read_csv(input_paths_str)
+        builder.data = pd.read_csv(input_paths_str, usecols=['review_id', 'rating', 'spoiler_tag', 'helpful_ratio'])
     
     print('opened file from hadoop')
 

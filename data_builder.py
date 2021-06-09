@@ -16,12 +16,6 @@ class DataBuilder:
         if not hasattr(self, 'data'):
             self.load_data()
 
-        del self.data['review_summary']
-        del self.data['review_detail']
-        del self.data['movie']
-        del self.data['review_summary_cleaned']
-        del self.data['review_detail_cleaned']
-
         for i, inp in enumerate(self.tf_idf_data):
             columns = inp.columns
             pivot = inp.groupby(['review_id', columns[1]])[columns[2]].first().unstack()

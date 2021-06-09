@@ -51,10 +51,10 @@
                             <tbody>
                                 <tr v-for="item in mostSimilar">
                                     <td>{{ item[1] }}</td>
-                                    <td>{{ item[3] }}</td>
-                                    <td>{{ item[5] }}</td>
+                                    <td>{{ item[3].slice(0, 200) }}</td>
+                                    <td>{{ item[5].slice(0, 200) }}</td>
                                     <td>{{ item[2] }}</td>
-                                    <td>{{ item[10] }}</td>
+                                    <td>{{ item[10].toFixed(2) }}</td>
                                     <td>{{ item[2] }}</td>
                                 </tr>
                             </tbody>

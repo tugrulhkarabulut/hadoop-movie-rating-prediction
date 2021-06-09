@@ -112,7 +112,7 @@ var app = new Vue({
             })
         },
 
-        predictInstance() {
+        async predictInstance() {
             const timer = this.startTimerPredict();
 
             this.predictInProgress = true;

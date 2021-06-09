@@ -4,6 +4,7 @@ import os
 import pandas as pd
 import re
 import pickle
+import json
 from sklearn.ensemble import RandomForestClassifier
 
 from ..processing import preprocess_single
@@ -29,7 +30,7 @@ def tf_idf(words, idf):
 
     return tf_idfs
 
-def find_similar(predict_input, data_input):
+def find_similar(predict_input, data_input, input_path):
     predict_input = [str(inp) for inp in predict_input]
     w = CosineSimilarityCalculator(args=[data_input, '-r', 'hadoop', '--doc_features', ','.join(predict_input)])
     cos_similarities = {}
@@ -38,7 +39,11 @@ def find_similar(predict_input, data_input):
         for key, value in w.parse_output(runner.cat_output()):
             cos_similarities[key] = value
 
-    return pd.DataFrame({'review_id': cos_similarities.keys(), 'similarity': cos_similarities.values()})
+    df_similarity = pd.DataFrame({'review_id': cos_similarities.keys(), 'similarity': cos_similarities.values()})
+    df_similarity.sort_values(by='similarity', ascending=False, inplace=True)
+    top_5 = list(df_similarity.head()['review_id'])
+
+    return top_5
 
 
 @bp.route('/predict', methods=['POST'])
@@ -47,11 +52,13 @@ def build():
     process_name = req_data['model']
     process_path = './app_data/' + process_name
 
-    feature_types = []
-    with open(process_path + '/feature_types.txt') as f:
-        for line in f:
-            feature_types.append(line[:-1])
 
+    with open(process_path + '/model.json', 'r') as f:
+        model_config = json.load(f)
+
+    feature_types = model_config['feature_types']
+    input_path = model_config['input_path']
+    hadoop_output = model_config["hadoop_output"]
 
 
     predict_input = []
@@ -143,9 +150,7 @@ def build():
 
 
 
-    df_similarity = find_similar(predict_input, process_path + '/output.csv')
-    df_similarity.sort_values(by='similarity', ascending=False, inplace=True)
-    top_5 = list(df_similarity.head()['review_id'])
+    top_5 = find_similar(predict_input, hadoop_output, input_path)
 
     print(top_5)
     res['most_similar'] = top_5

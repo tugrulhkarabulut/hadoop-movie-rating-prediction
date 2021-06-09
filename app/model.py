@@ -5,6 +5,7 @@ from ..train_model import *
 from pydoop import hdfs
 import shutil
 import os
+import json
 
 bp = Blueprint('model', __name__)
 
@@ -24,10 +25,6 @@ def extract():
     dataset_input = req_data['dataset_input']
     feature_types = req_data['feature_types'] 
 
-    with open(process_path + '/feature_types.txt', 'w') as f:
-        for feat in feature_types:
-            f.write(feat + '\n')
-
     if dataset_input == 'small':
         if env == 'multi':
             input_path = 'hdfs:///input/preprocessed_sample.csv'
@@ -39,6 +36,16 @@ def extract():
         else:
             input_path = 'hdfs:///input/preprocessed_part1_single.csv'
 
+
+    model_config = {
+        "input_path": input_path,
+        "env": env,
+        "dataset": dataset_input,
+        "hadoop_output": "hdfs://" + hadoop_output,
+        "feature_types": feature_types
+    }
+    with open(process_path + '/model.json', 'w') as f:
+        json.dump(model_config, f)
 
     extract_features(process_path, input_path, hadoop_output, feature_types)
 

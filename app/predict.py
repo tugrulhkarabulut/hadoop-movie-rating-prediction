@@ -6,6 +6,7 @@ import re
 import pickle
 import json
 from sklearn.ensemble import RandomForestClassifier
+from pydoop import hdfs
 
 from ..processing import preprocess_single
 from ..cosine_similarity_calculator import CosineSimilarityCalculator
@@ -42,6 +43,13 @@ def find_similar(predict_input, data_input, input_path):
     df_similarity = pd.DataFrame({'review_id': cos_similarities.keys(), 'similarity': cos_similarities.values()})
     df_similarity.sort_values(by='similarity', ascending=False, inplace=True)
     top_5 = list(df_similarity.head()['review_id'])
+
+
+    with hdfs.open(input_path) as f:
+        df = pd.read_csv(f)
+
+    most_similar = df[df['review_id'].isin(top_5)]
+    print(most_similar.shape)
 
     return top_5
 

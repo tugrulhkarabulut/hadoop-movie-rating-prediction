@@ -6,7 +6,6 @@ var app = new Vue({
         tfIdfCheck: false,
         nGramCheck: false,
         exclamationCheck: false,
-        featuresExtracted: false,
         dataId: '',
         modelNameInput: '',
         trainInProgress: false,
@@ -22,7 +21,9 @@ var app = new Vue({
         helpfulCountInput: "",
         hasSpoilersInput: false,
         predictionOutput: "",
-        mostSimilar: []
+        mostSimilar: [],
+        predictInProgress: false,
+        timeElapsedPredict: 0,
     },
 
     methods: {
@@ -37,14 +38,13 @@ var app = new Vue({
 
 
         async extractAndTrain() {
-            if (!this.featuresExtracted) {
-                timer = this.startTimer();
-                this.trainInProgress = true;
-                await this.extractFeatures();
-                await this.trainModel();
-                this.trainInProgress = false;
-                window.clearInterval(timer);
-            }
+            this.timeElapsed = 0;
+            const timer = this.startTimer();
+            this.trainInProgress = true;
+            await this.extractFeatures();
+            await this.trainModel();
+            this.trainInProgress = false;
+            window.clearInterval(timer);
         },
 
         async extractFeatures() {
@@ -77,7 +77,6 @@ var app = new Vue({
 
             await axios.post('/extract', data).then(res => {
                 this.processName = res.data.process_name
-                this.featuresExtracted = true;
             })
 
         },
@@ -99,6 +98,13 @@ var app = new Vue({
             }, 1000)
         },
 
+        startTimerPredict() {
+            this.timeElapsedPredict = 0;
+            return window.setInterval(() => {
+                this.timeElapsedPredict += 1 
+            }, 1000)
+        },
+
 
         getModels() {
             axios.get('/get-models').then(res => {
@@ -107,6 +113,9 @@ var app = new Vue({
         },
 
         predictInstance() {
+            const timer = this.startTimerPredict();
+
+            this.predictInProgress = true;
             const data = {
                 'model': this.modelInput,
                 'spoiler': this.hasSpoilersInput,
@@ -116,13 +125,16 @@ var app = new Vue({
                 'unhelpful_count': this.unhelpfulCountInput
             }
 
-            axios.post('/predict', data).then(res => {
+            await axios.post('/predict', data).then(res => {
                 //const probability = res.data.probability
                 console.log(res.data);
                 this.predictionOutput = res.data.prediction;
                 this.mostSimilar = res.data.most_similar;
                 
             })
+
+            window.clearInterval(timer);
+            this.predictInProgress = false;
         }
     }
   })

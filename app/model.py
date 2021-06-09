@@ -37,6 +37,8 @@ def extract():
             input_path = 'hdfs:///input/preprocessed_part1_single.csv'
 
 
+    print(input_path)
+
     model_config = {
         "input_path": input_path,
         "env": env,

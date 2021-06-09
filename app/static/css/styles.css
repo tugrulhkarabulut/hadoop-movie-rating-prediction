@@ -11012,7 +11012,11 @@ footer.footer .social-link:hover {
   background-size: cover;
 }
 .masthead.info {
+  height: 0;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.1) 100%), url("../assets/img/typewriter.jpg");
+}
+.masthead.info.active {
+  height: auto;
 }
 .masthead h1, .masthead .h1 {
   font-size: 4rem;

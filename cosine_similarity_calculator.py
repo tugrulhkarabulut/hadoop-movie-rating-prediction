@@ -15,13 +15,12 @@ class CosineSimilarityCalculator(MRJob):
 
     def mapper(self, _, line):
         orig_doc_feats = [float(feat) for feat in self.options.doc_features.split(',')]
-        orig_doc_norm = math.sqrt([f ** 2 for f in orig_doc_feats])
+        orig_doc_norm = math.sqrt(sum([f ** 2 for f in orig_doc_feats]))
 
         line_values = list(csv.reader(StringIO(line), skipinitialspace=True))[0]
         id = line_values[0]
         doc_feats = [float(feat) for feat in line_values[1:]]
-        doc_norm = math.sqrt([f ** 2 for f in doc_feats])
-
+        doc_norm = math.sqrt(sum([f ** 2 for f in doc_feats]))
         for i in range(len(doc_feats)):
             norm_multiple = orig_doc_norm * doc_norm
 

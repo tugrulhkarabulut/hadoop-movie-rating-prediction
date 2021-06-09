@@ -31,8 +31,9 @@
             </div>
         </header>
 
-        <header class="masthead d-flex" id="similar-table" v-ref="similarTable">
-            <div class="container" v-if="mostSimilar.length > 0">
+        <header class="masthead d-flex info" id="similar-table" v-ref="similarTable" v-if="mostSimilar.length > 0">
+            <div class="container bg-white p-4">
+                <p v-if="predictionOutput" class="mb-3">Predicted rating is {{ predictionOutput }}</p>
                 <h3>Most Similar Items</h3>
                 <div class="row justify-content-center">
                     <table class="table">

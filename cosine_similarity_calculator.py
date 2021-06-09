@@ -14,7 +14,7 @@ class CosineSimilarityCalculator(MRJob):
 
 
     def mapper(self, _, line):
-        orig_doc_feats = [float(feat) for feat in self.options.split(',')]
+        orig_doc_feats = [float(feat) for feat in self.options.doc_features.split(',')]
         orig_doc_norm = math.sqrt([f ** 2 for f in orig_doc_feats])
 
         line_values = list(csv.reader(StringIO(line), skipinitialspace=True))[0]

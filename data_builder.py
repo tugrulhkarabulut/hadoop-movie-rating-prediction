@@ -32,8 +32,6 @@ class DataBuilder:
             print('join done')
             self.data = self.data.fillna(0)
 
-        del self.data['review_id']
-
     def save(self, output_path):
         self.data.to_csv(output_path, index=False)
 

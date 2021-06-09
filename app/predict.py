@@ -8,6 +8,7 @@ import pickle
 from sklearn.ensemble import RandomForestClassifier
 
 from ..processing import preprocess_single
+from ..cosine_similarity_calculator import CosineSimilarityCalculator
 
 bp = Blueprint('predict', __name__)
 
@@ -28,6 +29,17 @@ def tf_idf(words, idf):
             tf_idfs.append(0)
 
     return tf_idfs
+
+def find_similar(predict_input, data_input):
+    w = CosineSimilarityCalculator(args=[data_input, '--doc_features', ','.join(predict_input)])
+    cos_similarities = {}
+    with w.make_runner() as runner:
+        runner.run()
+        for key, value in w.parse_output(runner.cat_output()):
+            cos_similarities[key] = value
+
+    return pd.DataFrame({'review_id': cos_similarities.keys(), 'similarity': cos_similarities.values()})
+
 
 @bp.route('/predict', methods=['POST'])
 def build():
@@ -129,6 +141,15 @@ def build():
     pred = model.predict([predict_input])[0]
     res = {'prediction': pred}
 
+
+
+    df_similarity = find_similar(predict_input, process_path + '/output.csv')
+    df_similarity.sort_values(by='similarity', ascending=False, inplace=True)
+    top_5 = df_similarity.head()['review_id']
+
+    print(top_5)
+    res['most_similar'] = top_5
+
     return res
 
 
@@ -146,9 +167,3 @@ def get_models():
     res['models'] = models
 
     return res
-
-
-@bp.route('/find-similar', methods=['POST'])
-def find_similar():
-    req_data = request.get_json()
-    return req_data

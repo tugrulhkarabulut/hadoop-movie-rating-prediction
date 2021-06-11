@@ -14,15 +14,15 @@ executing a job on hadoop that calculates cosine similarity
 between every review in the dataset and the given review.
 
 ## Technical Details
-Job implementations are implemented using MRJob 
+Job implementations are done by using MRJob 
 library in Python. A website is developed using Flask and
 JavaScript (Vue.js). You can train models, make a prediction and find similar reviews from the landing page 
 of the website.
 
-All of the info related to the model such as selected feature types, model's pickle file, train data, etc. are stored in the
-storage system in a separate folder. User can give names 
+All of the info related to the model such as selected feature types, dataset, model's pickle file, train data, etc. are stored in the
+file storage system in a separate folder. User can give names  
 to the models that they are built. In the prediction,
-user can refer to that model name to select that specific model.
+user can refer to that model name to select the corresponding model.
 
 ## How to Run the Application
 First of all, you need an Hadoop cluster 
@@ -76,7 +76,7 @@ hadoop fs -put /path/to/preprocessed_sample.csv /input/preprocessed_part1.csv
 ```
 
 
-## Some Screenshots of the Application
+## Some Screenshots
 
 ![](screenshots/1.png) 
 

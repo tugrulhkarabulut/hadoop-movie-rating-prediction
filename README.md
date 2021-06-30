@@ -9,8 +9,8 @@ features are available for you to extract. After feature
 extraction, a Random Forest Classifier is trained
 using the extracted features. Then, you can predict
 an unseen instance from the application and see the top 5
-similar reviews. Similar scores are found by 
-executing a job on hadoop that calculates cosine similarity 
+similar reviews. Similar reviews are found by 
+executing a job on hadoop that calculates cosine similarity scores
 between every review in the dataset and the given review.
 
 ## Technical Details
